@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <title>Search page</title>
+
+  <script>
+
+  jQuery(document).ready(function(){
+    
+    function userproc(){
+      var ngram = $('#ngram').val();
+      $.getJSON("/json_result", {"q":ngram}, function( data ) {
+        $('.ajax').html("<p><b>Your result:</b></p>" + data["ngram"]);
+      });
+      
+    }
+
+    $('#ngram').keypress(function(event) { 
+            if (event.keyCode === 13) { 
+              console.log("enter");
+              userproc();
+            }; 
+        }); 
+
+    $('#btn').click(function(){
+    userproc();
+    });  
+  $('#ngram').val("");
+  });
+
+	</script>
+
+ </head>
+ <body>  
+  <h1 id="logo">
+      <table>
+       <tbody><tr>
+         <td style="padding-left: 0cm; color: #009925; font-size: 28px;">Russian Google Ngrams Linked With Wikidata</td>
+       </tr>
+      </tbody></table>
+    </h1>
+  <p><b> Enter some Russian word: </b></p>
+  <input type="text" name="ngram" id="ngram" class="input">
+  <input type="button" name="btn" id="btn" value="Search!" class="input">
+  <div class="ajax" style="border: 1px solid orange;"> 
+  	kek!
+  </div>
+ </body>
+</html>
