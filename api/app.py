@@ -15,6 +15,7 @@ morph = Mystem()
 app = Flask(__name__)
 app.register_blueprint(api.as_blueprint())
 app.add_url_rule('/', 'search', api.as_view(), methods=['POST'])
+app.add_url_rule('/', 'datasets', api.as_view())
 
 
 #class NotFoundException(JSONRPCDispatchException):

@@ -12,32 +12,32 @@
   <script>
 
   jQuery(document).ready(function(){
-    
+
     function userproc(){
       var ngram = $('#ngram').val();
       $.getJSON("/json_result", {"q":ngram}, function( data ) {
         $('.ajax').html("<p><b>Your result:</b></p>" + data["ngram"]);
       });
-      
+
     }
 
-    $('#ngram').keypress(function(event) { 
-            if (event.keyCode === 13) { 
+    $('#ngram').keypress(function(event) {
+            if (event.keyCode === 13) {
               console.log("enter");
               userproc();
-            }; 
-        }); 
+            };
+        });
 
     $('#btn').click(function(){
     userproc();
-    });  
+    });
   $('#ngram').val("");
   });
 
 	</script>
 
  </head>
- <body>  
+ <body>
   <h1 id="logo">
       <table>
        <tbody><tr>
@@ -48,8 +48,10 @@
   <p><b> Enter some Russian word: </b></p>
   <input type="text" name="ngram" id="ngram" class="input">
   <input type="button" name="btn" id="btn" value="Search!" class="input">
-  <div class="ajax" style="border: 1px solid orange;"> 
+  <div class="ajax" style="border: 1px solid orange;">
   	kek!
   </div>
+  <p><b>There's </b><a href="/datasets"><b>more</b></a>
+  </p>
  </body>
 </html>

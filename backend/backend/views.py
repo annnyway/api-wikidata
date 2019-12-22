@@ -17,10 +17,10 @@ def query(request):
 	return render(request, "search.html")
 
 def json_result(request):
-	
+
 	# try:
 	data = request.GET["q"]
-	#except 
+	#except
 	response = req("http://127.0.0.1:5000/", "search", ngrams=[data])
 	data = json.loads(response.data.result)
 	print(data)
@@ -28,8 +28,11 @@ def json_result(request):
 
 	# return render(request, "search.html", context)
 	# return JsonResponse({"ngram": response.data.result)})
-	return JsonResponse({"ngram": ngrams}) 
+	return JsonResponse({"ngram": ngrams})
 
 #	return render(request, "search.html", json.dumps(data))
 #	app.get('result_json', function (req, res) {
 #	res.json({ "ngram": 'hi' }
+
+def datasets(request):
+	return render(request, "datasets.html")
