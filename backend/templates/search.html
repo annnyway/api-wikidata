@@ -1,57 +1,136 @@
 {% load static %}
 
-<!DOCTYPE HTML>
+<!doctype html>
 <html lang="en">
- <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <title>Search page</title>
 
-  <script>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>WikiNgram Viewer</title>
 
-  jQuery(document).ready(function(){
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/jumbotron/">
 
-    function userproc(){
-      var ngram = $('#ngram').val();
-      $.getJSON("/json_result", {"q":ngram}, function( data ) {
-        $('.ajax').html("<p><b>Your result:</b></p>" + data["ngram"]);
-      });
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
-    }
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
-    $('#ngram').keypress(function(event) {
-            if (event.keyCode === 13) {
-              console.log("enter");
-              userproc();
-            };
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
+
+    <script>
+        jQuery(document).ready(function() {
+
+            function userproc() {
+                var ngram = $('#ngram').val();
+                $.getJSON("/json_result", {
+                    "q": ngram
+                }, function(data) {
+                    if (data["ngram"] !== "") {
+                        $('#ajax').html("<div class='jumbotron jumbotron-fluid bg-white'> <div class='container'><h3 class='display-5'>Your result:</h3>" + data["ngram"] + data["wiki_entity"] + "</div></div>" + "<hr width='5000' color='#39CCCC'/> ");
+                    } else {
+                        $('#ajax').html("<div class='jumbotron jumbotron-fluid bg-white'> <div class='container'><h3 class='display-5'>Your result:</h3>" + data["error"] + "</div></div>" + "<hr width='5000' color='#39CCCC'/> ")
+                    }
+                });
+            }
+
+            $('#ngram').keypress(function(event) {
+                if (event.keyCode === 13) {
+                    userproc();
+                };
+            });
+
+            $('#btn').click(function() {
+                userproc();
+            });
+            $('#ngram').val("");
         });
+    </script>
 
-    $('#btn').click(function(){
-    userproc();
-    });
-  $('#ngram').val("");
-  });
+</head>
 
-	</script>
+<body>
 
- </head>
- <body>
-  <h1 id="logo">
-      <table>
-       <tbody><tr>
-         <td style="padding-left: 0cm; color: #009925; font-size: 28px;">Russian Google Ngrams Linked With Wikidata</td>
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-info flex-row-reverse">
+        <a class="navbar-brand" href="#about">About</a>
+        <a class="navbar-brand" href="#dataset">Dataset</a>
+    </nav>
+
+    <main role="main">
+
+        <div class="jumbotron" style="background:#FFDC00 !important">
+            <div class="container">
+                <p class="display-3"><b> WikiNgram Viewer </b></p>
+                <p>
+                    WikiNgram Viewer is a new tool for automatizing your research in Culturomics. We have linked Russian Google Ngrams with Wikidata and retrieved the events which caused their frequency growth in certain years. Just enter your words of interest and click "search".
+                </p>
+            </div>
+        </div>
+
+        <div class="jumbotron bg-white">
+            <div class="container">
+                <h3 class="display-7"> Enter Russian words, separated by a comma:</h3>
+                <br>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="ngram" id="ngram" placeholder="антипротон">
+                    <span class="input-group-btn">
+            <button type="button" name="btn" id="btn" class="btn btn-info">Search</button>
+          </span>
+                </div>
+            </div>
+        </div>
+
+        <hr width="5000" color="#39CCCC" height="5" />
+
+        <div id="ajax">
+        </div>
+
+        <div class="jumbotron" style="background:white !important" id="dataset">
+          <div class="container">
+        <table>
+          <tbody><tr>
+            <h3 class="display-5"><b>Corrected Dataset of Russian 1-grams from pre-revolutionary Google Books </b></h3>
        </tr>
       </tbody></table>
-    </h1>
-  <p><b> Enter some Russian word: </b></p>
-  <input type="text" name="ngram" id="ngram" class="input">
-  <input type="button" name="btn" id="btn" value="Search!" class="input">
-  <div class="ajax" style="border: 1px solid orange;">
-  	kek!
-  </div>
-  <p><b>There's </b><a href="/datasets"><b>more</b></a>
-  </p>
- </body>
+                <p>
+                    Russian Google 1-grams up to 1918 Year With Corrected Orthography. Blah blah blah here will be the explanation of this and a link to the <a href="https://github.com/kak-to-tak/Google_rusngram_spellcheck">repository</a>
+                </p>
+
+                <p><b> File Format: </b> Each of the files below is compressed <i>tab</i>-separated data. Each line has the following format:
+                </p>
+                <blockquote><pre>ngram TAB year TAB match_count TAB volume_count NEWLINE</pre>
+                </blockquote>
+                <p>As an example, here are the ?th and ?th lines from the <tt>a</tt> file of the Russian 1-grams (googlebooks-rus-corrected-1gram--a.gz):
+                </p>
+                <blockquote><pre>?   19??   ??    ??
+?   19??   ??    ??
+</pre></blockquote>
+                <p>The rest information about the meanings of the columns' names you can read <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">here.</a>
+                </p>
+                <p><b>1-grams</b>
+                    <!--<a href="http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-1gram-20120701-0.gz">1</a>-->
+                </p>
+            </div>
+        </div>
+
+        <div class="jumbotron bg-dark text-white" id="about">
+            <div class="container">
+                <h3 class="display-7"> About the WikiNgrams project</h3>
+                <p> some text </p>
+                <br>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="container">
+        <p>&copy;2019</p>
+    </footer>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+
 </html>

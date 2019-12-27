@@ -1,6 +1,7 @@
 # from django.http import HttpResponse
 from django.shortcuts import render
 from jsonrpcclient import request as req
+from jsonrpcclient.exceptions import ReceivedErrorResponseError
 from django.http import JsonResponse
 from django.core import serializers
 import json
@@ -18,21 +19,19 @@ def query(request):
 
 def json_result(request):
 
-	# try:
 	data = request.GET["q"]
-	#except
-	response = req("http://127.0.0.1:5000/", "search", ngrams=[data])
-	data = json.loads(response.data.result)
-	print(data)
-	ngrams = ", ".join(data["ngrams"])
+	data = [i.strip() for i in data.split(",")]
 
-	# return render(request, "search.html", context)
-	# return JsonResponse({"ngram": response.data.result)})
-	return JsonResponse({"ngram": ngrams})
+	try:
+		response = req("http://127.0.0.1:5000/", "search", ngrams=data)
+		output = json.loads(response.data.result)
 
-#	return render(request, "search.html", json.dumps(data))
-#	app.get('result_json', function (req, res) {
-#	res.json({ "ngram": 'hi' }
+		output_ngrams = ", ".join(output["ngrams"])
+		wiki_entities = ", ".join([i["wiki_entity"] for i in output["search_result"]])
 
-def datasets(request):
-	return render(request, "datasets.html")
+		result = JsonResponse({"ngram": output_ngrams, "wiki_entity": wiki_entities}) 
+	
+	except ReceivedErrorResponseError:
+		result = JsonResponse({"error": "Sorry, ngrams not found!", "ngram":"", "wiki_entity":""})
+
+	return result
