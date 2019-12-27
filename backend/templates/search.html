@@ -30,7 +30,7 @@
                     "q": ngram
                 }, function(data) {
                     if (data["ngram"] !== "") {
-                        $('#ajax').html("<div class='jumbotron jumbotron-fluid bg-white'> <div class='container'><h3 class='display-5'>Your result:</h3>" + data["ngram"] + data["wiki_entity"] + "</div></div>" + "<hr width='5000' color='#39CCCC'/> ");
+                        $('#ajax').html("<div class='jumbotron jumbotron-fluid bg-white'> <div class='container'>" + data["ngram"] + "</div></div>" + "<hr width='5000' color='#39CCCC'/> ");
                     } else {
                         $('#ajax').html("<div class='jumbotron jumbotron-fluid bg-white'> <div class='container'><h3 class='display-5'>Your result:</h3>" + data["error"] + "</div></div>" + "<hr width='5000' color='#39CCCC'/> ")
                     }
