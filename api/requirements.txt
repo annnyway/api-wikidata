@@ -1,0 +1,7 @@
+matplotlib
+pymystem3
+jsonrpc
+flask
+jsonrpcclient
+pprint
+json-rpc
