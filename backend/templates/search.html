@@ -101,12 +101,12 @@
 
                 <p><b> File Format: </b> Each of the files below is compressed <i>tab</i>-separated data. Each line has the following format:
                 </p>
-                <blockquote><pre>ngram TAB year TAB match_count TAB volume_count NEWLINE</pre>
+                <blockquote><pre>index raw_ngram TAB n_gram TAB year TAB match_count TAB volume_count TAB new_index TAB non_dictionary TAB corrected_ngram NEWLINE</pre>
                 </blockquote>
                 <p>As an example, here are the ?th and ?th lines from the <tt>a</tt> file of the Russian 1-grams (googlebooks-rus-corrected-1gram--a.gz):
                 </p>
-                <blockquote><pre>?   19??   ??    ??
-?   19??   ??    ??
+                <blockquote><pre>1    1арег   1арег   1896    1       1       1       True    царей
+1       1верь   1верь   1897    1       1       1       True    дверь
 </pre></blockquote>
                 <p>The rest information about the meanings of the columns' names you can read <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">here.</a>
                 </p>
