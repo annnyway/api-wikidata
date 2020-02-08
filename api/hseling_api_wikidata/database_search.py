@@ -1,20 +1,25 @@
-import matplotlib.pyplot as plt
-import json
+from itertools import groupby
+import pandas as pd
+
 
 class DatabaseSearch:
     
     def __init__(self, ngrams:list, morph, punct, cursor):
+        
         self.morph = morph
         self.cursor = cursor
         self.punct = punct
         self.ngrams = ngrams
         self.lemmatized_ngrams = self.lemmatize()
-        self.sql_result = self.sql_query()
+        self.result = self.sql_query()
+        
+        self.dict_format = self.dict_format()
+        self.csv_format = self.csv_format()
         self.coordinates = self.get_coordinates()
         
         
     def lemmatize(self):
-        """Returns lemmatized ngrams"""
+        """ Returns lemmatized ngrams """
         lemmatized_ngrams = []
         ngrams = [n.split() for n in self.ngrams]
         for ngram in ngrams:
@@ -26,16 +31,13 @@ class DatabaseSearch:
                 ngram = [w.strip(self.punct).lower() for w in ngram]
                 ngram_lemma = ' '.join([' '.join(self.morph.lemmatize(w)).strip() for w in ngram])
                 lemmatized_ngrams.append(ngram_lemma)
-            #    raise IndexError("Вы ввели одну или несколько биграмм. Поиск по биграммам пока не поддерживается. Пожалуйста, удалите биграммы из запроса и повторите поиск")
-            # elif len(ngram) >= 3:
-            #    raise IndexError("Вы ввели одну или несколько триграмм. Поиск по триграммам и более длинным сочетаниям слов пока не поддерживается. Пожалуйста, удалите их из запроса и повторите поиск")
+                
         return lemmatized_ngrams
         
         
     def sql_query(self):
-        """Looks for the query ngrams in the database 
-        and returns a list of dictionaries, 
-        where one dictionary is an entry from the database"""
+        
+        """Makes ngram queries to the ngram database"""
         
         ngrams_with_letters = {ngram: ngram[0] for ngram in self.lemmatized_ngrams}
         result = []
@@ -48,52 +50,70 @@ class DatabaseSearch:
             
         if result == []:
             raise NotFoundError("Ngrams not found")
+            
+        return result
+    
+    
+    
+    def dict_format(self):
+        """ Converts the query result into the format of lists of dictionaries """ 
+        
         col_list = ["ngram", "start_letter", "Q_number", 
                     "wiki_entity", "property_code","property_value",
                      "object", "organization", "just_date",
                     "start_time","end_time","time_point",
                     "growth_speed","google_year_1","google_year_2", "id"]
-        
-        sql_dict = [dict(zip(col_list,i)) for i in result]
+     
+        dict_format = [dict(zip(col_list,i)) for i in self.result]
         
         # add entry index
-        for i,d in enumerate(sql_dict):
+        for i,d in enumerate(dict_format):
             d["entry_id"] = i 
             
-        return sql_dict
+        return dict_format
+        
+    
+    def csv_format(self):
+        """ Converts the dictionaries with query result data into csv format (appropriate for downloading) """
+        
+        df = pd.DataFrame(self.dict_format, columns = ["entry_id","ngram", 
+                    "wiki_entity", "Q_number", "property_code","property_value",
+                     "object", "organization", "just_date",
+                    "start_time","end_time","time_point",
+                    "growth_speed","google_year_1","google_year_2"])
+        
+        csv_format = df.to_csv()
+        
+        return csv_format    
+
         
     
     def get_coordinates(self):
-        """Returns a sorted list of triples:
-        (entry id in database search result, year, growth speed value)"""
+        """ Makes from query result data lists of triples (one list for one ngram). 
+        Triples in the list are interpreted as follows:
+        (entry id in database search result, year, growth speed value) """
+        
         coords = []
-        for d in self.sql_result:
-            coords.append((d["entry_id"], d["google_year_1"], d["growth_speed"]))
-            if d["google_year_2"]:
-                coords.append((d["entry_id"], d["google_year_2"], d["growth_speed"]))  
-        sorted_coords = sorted(coords, key=self.getKey)
-        return sorted_coords
+        groups = [list(v) for k, v in groupby(self.dict_format,key=lambda x:x['ngram'])]
+        
+        for group in groups:
+            group_coords = []
+            for d in group:
+                group_coords.append((d["entry_id"], d["google_year_1"], d["growth_speed"]))
+                if d["google_year_2"]:
+                    group_coords.append((d["entry_id"], d["google_year_2"], d["growth_speed"]))  
+            sorted_coords = sorted(group_coords, key=self.getKey)
+            coords.append(sorted_coords)
+    
+        return coords
     
     
     @staticmethod
     def getKey(item):
-        """Returns keys for sorting coordinates by years"""
+        """ Returns keys for sorting coordinates by years """
         return item[1]
         
-        
-    def get_plot(self):
-        """Draws a plot:
-        x - ngrams' years of interest found in Wikidata;
-        y - frequency growth speed value standardized by removing the mean 
-        and scaling to unit variance whithin every ngram sample;
-        point labels - ngram index in the batabase output"""
-        x = [i[1] for i in self.coordinates]
-        y = [i[2] for i in self.coordinates]
-        plt.figure(figsize=(13, 8))
-        plt.plot(x,y)
-        for coord in self.coordinates:
-            plt.annotate(coord[0],(coord[1],coord[2]))
-        plt.show()
+                
 
 
 class NotFoundError(Exception):

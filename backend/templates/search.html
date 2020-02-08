@@ -14,6 +14,7 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/jumbotron/">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -25,16 +26,54 @@
         jQuery(document).ready(function() {
 
             function userproc() {
+
                 var ngram = $('#ngram').val();
+
                 $.getJSON("/json_result", {
                     "q": ngram
-                }, function(data) {
-                    if (data["ngram"] !== "") {
-                        $('#ajax').html("<div class='jumbotron jumbotron-fluid bg-white'> <div class='container'>" + data["ngram"] + "</div></div>" + "<hr width='5000' color='#39CCCC'/> ");
+                }, 
+
+                function(data) {
+
+                    if (data.hasOwnProperty("error")) {
+
+                        $("#ajax").addClass("d-none");
+                        $("#ajax_error").removeClass("d-none");
+
                     } else {
-                        $('#ajax').html("<div class='jumbotron jumbotron-fluid bg-white'> <div class='container'><h3 class='display-5'>Your result:</h3>" + data["error"] + "</div></div>" + "<hr width='5000' color='#39CCCC'/> ")
-                    }
-                });
+
+                        $("#ajax").addClass("d-none");
+                        $("#ajax_error").addClass("d-none");
+
+
+                        var coords = data["coords"].split("||");
+                        var traces=[];
+
+                        for (var i = 0; i < coords.length; i++) {
+                            if (coords[i] !== "") {
+                                var line_coords = coords[i].split("|"); 
+                                console.log(line_coords)
+                                traces.push({    
+                                    x: line_coords[0].split(","),
+                                    y: line_coords[1].split(","),
+                                    type: 'scatter'}
+                                )}
+                            };
+
+
+                        var layout = { 
+                                title: "Your result:",
+                                font: {size: 14}
+                                    };
+
+                        var config = {responsive: true}
+
+                        Plotly.newPlot('viz', traces, layout, config);
+                        $("#ajax").removeClass("d-none");
+                        $("#ajax_table").removeClass("d-none");
+                        $(".tbl").html(data["ngram"])
+                        }});
+                
             }
 
             $('#ngram').keypress(function(event) {
@@ -46,7 +85,9 @@
             $('#btn').click(function() {
                 userproc();
             });
+
             $('#ngram').val("");
+            
         });
     </script>
 
@@ -83,10 +124,33 @@
             </div>
         </div>
 
-        <hr width="5000" color="#39CCCC" height="5" />
 
-        <div id="ajax">
+        <div id="ajax_error" class="d-none">
+            <div class='jumbotron bg-white'> 
+                <div class='container viz'>
+                    <h3 class='display-5'>Sorry, ngrams not found! Try again.</h3>
+                </div>
+            </div>
         </div>
+
+        <div id="ajax" class="d-none">
+            <div class='jumbotron bg-white'> 
+                <div class='container viz' id="viz">
+                </div>
+            </div>
+            <hr width='5000' color='#39CCCC'/>
+        </div>
+
+
+        <div id="ajax_table" class="d-none">
+            <div class='jumbotron bg-white'> 
+                <div class='container tbl'>
+                </div>
+            </div>
+        </div>
+
+        <hr width='5000' color='#39CCCC'/>
+
 
         <div class="jumbotron" style="background:white !important" id="dataset">
           <div class="container">
@@ -101,12 +165,12 @@
 
                 <p><b> File Format: </b> Each of the files below is compressed <i>tab</i>-separated data. Each line has the following format:
                 </p>
-                <blockquote><pre>index raw_ngram TAB n_gram TAB year TAB match_count TAB volume_count TAB new_index TAB non_dictionary TAB corrected_ngram NEWLINE</pre>
+                <blockquote><pre>ngram TAB year TAB match_count TAB volume_count NEWLINE</pre>
                 </blockquote>
                 <p>As an example, here are the ?th and ?th lines from the <tt>a</tt> file of the Russian 1-grams (googlebooks-rus-corrected-1gram--a.gz):
                 </p>
-                <blockquote><pre>1    1арег   1арег   1896    1       1       1       True    царей
-1       1верь   1верь   1897    1       1       1       True    дверь
+                <blockquote><pre>?   19??   ??    ??
+?   19??   ??    ??
 </pre></blockquote>
                 <p>The rest information about the meanings of the columns' names you can read <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">here.</a>
                 </p>
