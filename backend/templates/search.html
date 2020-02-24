@@ -352,8 +352,6 @@
             <hr width='5000' color='black'/>
         </div>
 
-
-
         <div class="jumbotron" style="background:white !important" id="dataset">
           <div class="container">
         <table>
@@ -362,22 +360,23 @@
        </tr>
       </tbody></table>
                 <p>
-                    Russian Google 1-grams up to 1918 Year With Corrected Orthography. Blah blah blah here will be the explanation of this and a link to the <a href="https://github.com/kak-to-tak/Google_rusngram_spellcheck">repository</a>
+                    Russian Google 1-grams up to 1918 year with an attemted correction of orthography supposedly mistaken by OCR. A fuller explanation is in the <a href="https://github.com/kak-to-tak/Google_rusngram_spellcheck/blob/master/Experiments_with_Automatic_Spelling_Correction_of_Russian_Google_ngrams.pdf">paper</a> and the <a href="https://github.com/kak-to-tak/Google_rusngram_spellcheck">repository</a>
                 </p>
 
                 <p><b> File Format: </b> Each of the files below is compressed <i>tab</i>-separated data. Each line has the following format:
                 </p>
-                <blockquote><pre>ngram TAB year TAB match_count TAB volume_count NEWLINE</pre>
+                <blockquote><pre>index raw_ngram TAB n_gram TAB year TAB match_count TAB volume_count TAB new_index TAB non_dictionary TAB corrected_ngram NEWLINE</pre>
                 </blockquote>
-                <p>As an example, here are the ?th and ?th lines from the <tt>a</tt> file of the Russian 1-grams (googlebooks-rus-corrected-1gram--a.gz):
+                <p>As an example, here is the 1897th line from the <tt>a</tt> file of the Russian 1-grams (googlebooks-rus-corrected-1gram--a.gz):
                 </p>
-                <blockquote><pre>?   19??   ??    ??
-?   19??   ??    ??
+                <blockquote><pre>1  1верь 1верь 1897  1 1 1 True тверь
 </pre></blockquote>
                 <p>The rest information about the meanings of the columns' names you can read <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">here.</a>
                 </p>
                 <p><b>1-grams</b>
-                    <!--<a href="http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-1gram-20120701-0.gz">1</a>-->
+                    <a href="https://drive.google.com/open?id=1keJPwSNTFwH3U8-HYtsHw-LsBLHSWcW9">1</a>
+                    <a href="https://drive.google.com/open?id=1zJzXNDGrjpCFH__cmblxXQCsJM9VgfKH">2</a>
+                    <a href="https://drive.google.com/open?id=1_2nZbLToP-0Ey4Atc-ZjAmY0GAdZlqhj">4</a>
                 </p>
             </div>
         </div>
