@@ -8,7 +8,7 @@ import json
 from hseling_api_wikidata.database_search import DatabaseSearch, NotFoundError
 from hseling_api_wikidata.connect_to_db import connect
 
-punct = punctuation+'«»—…“”*–'
+punct = punctuation + '«»—…“”*–'
 morph = Mystem()
 
 app = Flask(__name__)
@@ -17,17 +17,15 @@ app.add_url_rule('/', 'search', api.as_view(), methods=['POST'])
 
 
 @api.dispatcher.add_method
-def search(ngrams:list):
+def search(ngrams: list):
     cursor = connect("wikidata.db")
-    try: 
-        data = DatabaseSearch(ngrams=ngrams, 
-                              morph=morph, 
+    try:
+        data = DatabaseSearch(ngrams=ngrams,
+                              morph=morph,
                               punct=punct,
                               cursor=cursor)
-        return json.dumps({"ngrams": data.ngrams, 
-                            "dict_result": data.dict_format,
-                            "csv_result": data.csv_format,
-                            "coordinates": data.coordinates})
+        return json.dumps({"ngrams": data.ngrams,
+                           "csv_result": data.csv_format})
     except NotFoundError:
         raise JSONRPCDispatchException(code=404, message="Ngrams not found")
 

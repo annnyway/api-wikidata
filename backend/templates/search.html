@@ -14,7 +14,9 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/jumbotron/">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -22,58 +24,238 @@
     <!-- Custom styles for this template -->
     <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
 
+
+    <script>
+        function downloadCSV(csv, filename) {
+            var csvFile;
+            var downloadLink;
+
+            csvFile = new Blob([csv], {type: "text/csv"});
+            downloadLink = document.createElement("a");
+            downloadLink.download = filename;
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+        }
+
+        function exportTableToCSV(filename) {
+            var csv = [];
+            var rows = document.querySelectorAll("table tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+
+                for (var j = 0; j < cols.length; j++)
+                    row.push(cols[j].innerText);
+
+                csv.push(row.join(","));
+            }
+            downloadCSV(csv.join("\n"), filename);
+        }
+    </script>
+
     <script>
         jQuery(document).ready(function() {
+
+            function generateRandomNumber(min, max) {
+                            return Math.random() * (max - min) + min;
+                        };
 
             function userproc() {
 
                 var ngram = $('#ngram').val();
 
                 $.getJSON("/json_result", {
-                    "q": ngram
-                }, 
 
-                function(data) {
+                    "q": ngram
+
+                }, function(data) {
 
                     if (data.hasOwnProperty("error")) {
 
-                        $("#ajax").addClass("d-none");
-                        $("#ajax_error").removeClass("d-none");
+                        $("#ajax").hide();
+                        $("#ajax_table").hide();
+                        $("#ajax_error").removeClass("d-none").show();
 
                     } else {
 
-                        $("#ajax").addClass("d-none");
-                        $("#ajax_error").addClass("d-none");
+                        $("#ajax").show();
+                        $("#ajax_error").hide();
+
+                        console.log(data["csv"])
+
+                        var google_years_1 = [],
+                            google_years_2 = [],
+                            growthSpeed = [],
+                            ngrams = [],
+                            wikiEntity = [],
+                            qNumber = [],
+                            propertyValue = [],
+                            object = [],
+                            organization = [],
+                            justDate = [],
+                            startTime = [],
+                            endTime = [],
+                            timePoint = [];
+
+                        d3.csvParseRows(data["csv"], function(d) {
+                            google_years_1.push(Number(d[14]));
+                            google_years_2.push(Number(d[15]));
+                            growthSpeed.push(Number(d[13]));
+                            ngrams.push(d[2]);
+                            wikiEntity.push(d[3]);
+                            qNumber.push(d[4]);
+                            propertyValue.push(d[6]);
+                            object.push(d[7]);
+                            organization.push(d[8]);
+                            justDate.push(d[9]);
+                            startTime.push(d[10]);
+                            endTime.push(d[11]);
+                            timePoint.push(d[12]);
+                        });
+
+                        var new_years_1 = google_years_1.slice(1),
+                            new_years_2 = google_years_2.slice(1),
+                            new_growthSpeed = growthSpeed.slice(1),
+                            new_ngrams = ngrams.slice(1),
+                            new_wikiEntity = wikiEntity.slice(1),
+                            new_qNumber = qNumber.slice(1),
+                            new_propertyValue = propertyValue.slice(1),
+                            new_object = object.slice(1),
+                            new_org = organization.slice(1),
+                            new_justDate = justDate.slice(1),
+                            new_startTime = startTime.slice(1),
+                            new_endTime = endTime.slice(1),
+                            new_timePoint = timePoint.slice(1);
+
+                        // add start-time and-time like this https://plot.ly/~jg3526/436/hotspots-vs-segments/#/
+
+                        var text = [];
+                        for (let i = 0; i < new_ngrams.length; i++) {
+                            let hover_info = "<b>" + new_ngrams[i]+ "</b><br><br>" +
+                                "<b>Wiki Entity</b>: " + new_wikiEntity[i] + "<br>" +
+                                "<b>#Q</b>: "+ new_qNumber[i] + "<br>" +
+                                "<b>Property</b>: " + new_propertyValue[i] + "<br>"
+                            if (new_object[i] !== "") {
+                                hover_info += "<b>Object</b>: " + new_object[i] + "<br>"
+                            }
+                            if (new_org[i] !== "") {
+                                hover_info += "<b>Organization</b>: " + new_org[i] + "<br>"
+                            }
+                            if (new_justDate[i] !== "") {
+                                hover_info += "<b>Date</b>: " + new_justDate[i] + "<br>"
+                            }
+                            if (new_startTime[i] !== "") {
+                                hover_info += "<b>Start Time</b>: " + new_startTime[i] + "<br>"
+                            }
+                            if (new_endTime[i] !== "") {
+                                hover_info += "<b>End Time</b>: " + new_endTime[i] + "<br>"
+                            }
+                            if (new_timePoint[i] !== "") {
+                                hover_info += "<b>Time Point</b>: " + new_timePoint[i] + "<br>"
+                            }
+                            hover_info += "<b>Relative Growth Speed</b>: " + new_growthSpeed[i] + "<br>"
+                            text.push(hover_info)
+                        }
+
+                        let new_growthSpeed_jittered = new_growthSpeed.map(
+                            function(element) {
+                                return element+generateRandomNumber(-0.03, 0.03)
+                            }
+                        );
+
+                        Plotly.newPlot("viz", {
+                                data: [
+                                {
+                                    type: "scatter",
+                                    mode: "markers",
+                                    x: new_years_1,
+                                    y: new_growthSpeed_jittered,
+                                    opacity: 0.7,
+                                    marker: {
+                                        size: 10,
+                                        line: {
+                                            color: 'black',
+                                            width: 1
+                                        }
+                                    },
+                                    transforms: [{ type: "groupby", groups: new_ngrams }],
+                                    hovertemplate: text,
+                                }],
+                                layout: {
+                                    title: "Your result:",
+                                    hovermode: "closest",
+                                    hoverlabel: { bgcolor: "#FFF" },
+                                    legend: {orientation: 'h', y: -0.3},
+                                    xaxis: {
+                                        title: "Years",
+                                        zeroline: false
+                                    },
+                                    yaxis: {
+                                        title: "Standard Deviation of Frequency Growth (sigma)",
+                                    },
+                                    height: 600,
+                                    shapes: [
+                                        {
+                                            type: 'line',
+                                            x0: 1920,
+                                            y0: 2,
+                                            x1: 2010,
+                                            y1: 2,
+                                            line: {
+                                                color: 'green',
+                                                width: 1,
+                                                dash: 'dot'
+                                            }
+                                        },
+                                    {
+                                            type: 'line',
+                                            x0: 1920,
+                                            y0: 3,
+                                            x1: 2010,
+                                            y1: 3,
+                                            line: {
+                                                color: 'red',
+                                                width: 1,
+                                                dash: 'dot'
+                                            }
+                                        },
+                                        {
+                                            type: 'line',
+                                            x0: 1920,
+                                            y0: -2,
+                                            x1: 2010,
+                                            y1: -2,
+                                            line: {
+                                                color: 'green',
+                                                width: 1,
+                                                dash: 'dot'
+                                            }
+                                        },
+                                        {
+                                            type: 'line',
+                                            x0: 1920,
+                                            y0: -3,
+                                            x1: 2010,
+                                            y1: -3,
+                                            line: {
+                                                color: 'red',
+                                                width: 1,
+                                                dash: 'dot'
+                                            }
+                                        },
+                                    ],
+                                },
+                                config: { responsive: true }
+                            });
 
 
-                        var coords = data["coords"].split("||");
-                        var traces=[];
-
-                        for (var i = 0; i < coords.length; i++) {
-                            if (coords[i] !== "") {
-                                var line_coords = coords[i].split("|"); 
-                                console.log(line_coords)
-                                traces.push({    
-                                    x: line_coords[0].split(","),
-                                    y: line_coords[1].split(","),
-                                    type: 'scatter'}
-                                )}
-                            };
-
-
-                        var layout = { 
-                                title: "Your result:",
-                                font: {size: 14}
-                                    };
-
-                        var config = {responsive: true}
-
-                        Plotly.newPlot('viz', traces, layout, config);
-                        $("#ajax").removeClass("d-none");
-                        $("#ajax_table").removeClass("d-none");
-                        $(".tbl").html(data["ngram"])
+                        $("#ajax").show();
+                        $("#ajax_table").removeClass("d-none").show();
+                        $(".tbl").html(data["table"])
                         }});
-                
+
             }
 
             $('#ngram').keypress(function(event) {
@@ -87,7 +269,7 @@
             });
 
             $('#ngram').val("");
-            
+
         });
     </script>
 
@@ -95,30 +277,48 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-info flex-row-reverse">
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top flex-row-reverse" style="background-color:#474647">
         <a class="navbar-brand" href="#about">About</a>
         <a class="navbar-brand" href="#dataset">Dataset</a>
     </nav>
 
     <main role="main">
 
-        <div class="jumbotron" style="background:#FFDC00 !important">
+        <div class="jumbotron bg-white text-black" style="!important">
             <div class="container">
-                <p class="display-3"><b> WikiNgram Viewer </b></p>
-                <p>
-                    WikiNgram Viewer is a new tool for automatizing your research in Culturomics. We have linked Russian Google Ngrams with Wikidata and retrieved the events which caused their frequency growth in certain years. Just enter your words of interest and click "search".
+                <p class="display-4"><b> WikiNgram Viewer </b></p>
+                <img src="{% static 'images/events.png' %}" class="img-fluid" alt="Events">
+                <p class="display-5">
+                    <b>WikiNgram Viewer</b> is a new tool for automatizing your research in Culturomics.
+                    This tool:
+                    <ul>
+                <li>provides the results of linking Russian ngrams from the Google Books with Wikidata;</li>
+                <li>builds <b>a scatter plot</b> of Wikidata events about query ngrams, with details on the hover.
+                <ul><li><i>X-coordinate</i> is a year when the ngram has grown in usage in the Google Books;
+            </li>
+                <li><i>Y-coordinate</i> is a <i>Z-score</i> of the ngram frequency growth in this year;</li>
+                   <li>If <i>Z-score</i> > 1.96, the ngram grew in usage this year more than on average;</li>
+                    <li>If -1.96 < <i>Z-score</i> < 1.96, the number of usages grew as usual;</li>
+                    <li>If <i>Z-score</i> is below 1.96, the usage grew less than usual; </li></ul>
+	<li>provides the table with the graph data. The table can de downloaded as CSV.</li>
+</ul>
+                WikiNgram Viewer works only with Russian and is complementary to the Google Books Ngram Viewer (link).
+ </p>
+                 <p class="display-5">
+                Just enter your words of interest and click "search".
                 </p>
             </div>
         </div>
+        <hr width='5000' color='black'/>
 
         <div class="jumbotron bg-white">
             <div class="container">
-                <h3 class="display-7"> Enter Russian words, separated by a comma:</h3>
+                <h4 class="display-7"> Enter Russian words, separated by a comma:</h4>
                 <br>
                 <div class="input-group">
                     <input type="text" class="form-control" name="ngram" id="ngram" placeholder="антипротон">
                     <span class="input-group-btn">
-            <button type="button" name="btn" id="btn" class="btn btn-info">Search</button>
+            <button type="button" name="btn" id="btn" class="btn text-white bg-dark">Search</button>
           </span>
                 </div>
             </div>
@@ -126,30 +326,32 @@
 
 
         <div id="ajax_error" class="d-none">
-            <div class='jumbotron bg-white'> 
+            <hr width='5000' color='#39CCCC'/>
+            <div class='jumbotron bg-white'>
                 <div class='container viz'>
                     <h3 class='display-5'>Sorry, ngrams not found! Try again.</h3>
                 </div>
             </div>
+            <hr width='5000' color='black'/>
         </div>
 
-        <div id="ajax" class="d-none">
-            <div class='jumbotron bg-white'> 
+        <div id="ajax">
+            <div class='jumbotron bg-white'>
                 <div class='container viz' id="viz">
                 </div>
             </div>
-            <hr width='5000' color='#39CCCC'/>
+            <hr width='5000' color='black'/>
         </div>
 
 
         <div id="ajax_table" class="d-none">
-            <div class='jumbotron bg-white'> 
+            <div class='jumbotron bg-white'>
                 <div class='container tbl'>
                 </div>
             </div>
+            <hr width='5000' color='black'/>
         </div>
 
-        <hr width='5000' color='#39CCCC'/>
 
 
         <div class="jumbotron" style="background:white !important" id="dataset">
@@ -180,9 +382,9 @@
             </div>
         </div>
 
-        <div class="jumbotron bg-dark text-white" id="about">
+        <div class="jumbotron text-white bg-dark" id="about">
             <div class="container">
-                <h3 class="display-7"> About the WikiNgrams project</h3>
+                <h3> About the WikiNgrams project</h3>
                 <p> some text </p>
                 <br>
             </div>
