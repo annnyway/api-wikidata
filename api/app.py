@@ -8,6 +8,8 @@ import json
 from hseling_api_wikidata.database_search import DatabaseSearch, NotFoundError
 from hseling_api_wikidata.connect_to_db import connect
 
+from get_data import get_data
+
 punct = punctuation + '«»—…“”*–'
 morph = Mystem()
 
@@ -29,7 +31,17 @@ def search(ngrams: list):
     except NotFoundError:
         raise JSONRPCDispatchException(code=404, message="Ngrams not found")
 
+app.add_url_rule('/', 'clustersearch', api.as_view(), methods=['POST'])
+@api.dispatcher.add_method
+def clustersearch(ngram:str):
+
+    try:
+        data = get_data(ngram)
+        return json.dumps(data)
+    except NotFoundError:
+        raise JSONRPCDispatchException(code=404, message="Ngrams not found")
 
 if __name__ == "__main__":
     # app.run(host='0.0.0.0', debug=True, port=80)
     app.run(debug=True)
+
