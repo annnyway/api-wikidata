@@ -19,5 +19,7 @@ from . import views
 
 urlpatterns = [
     path('search/', views.query, name="search"),
-	path("json_result", views.json_result, name="json_result")
+    path('clustersearch/', views.clustersearch, name="clustersearch"),
+	path("json_result", views.json_result, name="json_result"),
+    path("json_result_plot", views.json_result_plot, name="json_result_plot")
 ]
