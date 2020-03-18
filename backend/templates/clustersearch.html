@@ -134,6 +134,20 @@
             <button type="button" name="btn" id="btn" class="btn text-white bg-dark">Search</button>
           </span>
                 </div>
+                            <div class="form-check">
+<input class="form-check-input" type="radio" name="SearchType" id="SearchType1" value="option1" checked="">
+<label class="form-check-label" for="SearchType1">
+Cosine similarity
+</label>
+</div>
+<div class="form-check">
+<input class="form-check-input" type="radio" name="SearchType" id="SearchType2" value="option2">
+<label class="form-check-label" for="SearchType2">
+DTW similarity (Dynamic Time Warping)
+</label>
+</div>
+</label>
+</div>
             </div>
         </div>
 
@@ -163,54 +177,6 @@
         </div>
 
         <hr width='5000' color='#39CCCC' />
-
-
-        <div class="jumbotron" style="background:white !important" id="dataset">
-            <div class="container">
-                <table>
-                    <tbody>
-                        <tr>
-                            <h3 class="display-5"><b>Corrected Dataset of Russian 1-grams from pre-revolutionary Google
-                                    Books </b></h3>
-                        </tr>
-                    </tbody>
-                </table>
-                <p>
-                    HUI HUI ZHOPA Russian Google 1-grams up to 1918 Year With Corrected Orthography. Blah blah blah here
-                    will be the explanation of this and a link to the <a
-                        href="https://github.com/kak-to-tak/Google_rusngram_spellcheck">repository</a>
-                </p>
-
-                <p><b> File Format: </b> Each of the files below is compressed <i>tab</i>-separated data. Each line has
-                    the following format:
-                </p>
-                <blockquote>
-                    <pre>ngram TAB year TAB match_count TAB volume_count NEWLINE</pre>
-                </blockquote>
-                <p>As an example, here are the ?th and ?th lines from the <tt>a</tt> file of the Russian 1-grams
-                    (googlebooks-rus-corrected-1gram--a.gz):
-                </p>
-                <blockquote>
-                    <pre>?   19??   ??    ??
-?   19??   ??    ??
-</pre>
-                </blockquote>
-                <p>The rest information about the meanings of the columns' names you can read <a
-                        href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">here.</a>
-                </p>
-                <p><b>1-grams</b>
-                    <!--<a href="http://storage.googleapis.com/books/ngrams/books/googlebooks-eng-all-1gram-20120701-0.gz">1</a>-->
-                </p>
-            </div>
-        </div>
-
-        <div class="jumbotron bg-dark text-white" id="about">
-            <div class="container">
-                <h3 class="display-7"> About the WikiNgrams project</h3>
-                <p> some text </p>
-                <br>
-            </div>
-        </div>
 
     </main>
 
