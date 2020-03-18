@@ -14,11 +14,12 @@ def clustersearch(request):
     return render(request, "clustersearch.html")
 
 def json_result_plot(request):
+    res = request.GET
 
-    data = request.GET["q"]
+
 
     try:
-        response = req("http://127.0.0.1:5000/", "clustersearch", ngram=data)
+        response = req("http://127.0.0.1:5000/", "clustersearch", data=res)
         output = json.loads(response.data.result)
         words = output['ngrams']
         result = []

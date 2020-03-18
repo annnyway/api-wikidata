@@ -34,11 +34,15 @@ def search(ngrams: list):
         raise JSONRPCDispatchException(code=404, message="Ngrams not found")
 
 app.add_url_rule('/', 'clustersearch', api.as_view(), methods=['POST'])
+
 @api.dispatcher.add_method
-def clustersearch(ngram:str):
+def clustersearch(data: dict):
+    ngram = data["q"]
+    sim = data["sim"]
+    freq = data["freq"]
 
     try:
-        data = get_data(ngram)
+        data = get_data(ngram=ngram, sim=sim, freq=freq)
         return json.dumps(data)
     except NotFoundError:
         raise JSONRPCDispatchException(code=404, message="Ngrams not found")

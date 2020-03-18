@@ -31,7 +31,9 @@
                 var ngram = $('#ngram').val();
 
                 $.getJSON("/json_result_plot", {
-                    "q": ngram
+                    "q": ngram,
+                    "freq": "relative_frequencies_1918_2009",
+                    "sim": "top10_cosine_rel_values"
                 },
 
                     function (data) {
@@ -129,7 +131,7 @@
                 <h4 class="display-7"> Enter a Russian word:</h4>
                 <br>
                 <div class="input-group">
-                    <input type="text" class="form-control" name="ngram" id="ngram" placeholder="антипротон">
+                    <input type="text" class="form-control" name="ngram" id="ngram" placeholder="дружинница">
                     <span class="input-group-btn">
             <button type="button" name="btn" id="btn" class="btn text-white bg-dark">Search</button>
           </span>
