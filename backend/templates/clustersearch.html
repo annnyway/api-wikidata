@@ -15,6 +15,7 @@
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -88,32 +89,50 @@
 <body>
 
     <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-info flex-row-reverse">
-        <a class="navbar-brand" href="#about">About</a>
-        <a class="navbar-brand" href="#dataset">Dataset</a>
+        <a class="navbar-brand" href="../search#about">About</a>
+        <a class="navbar-brand" href="../search#dataset">Dataset</a>
+        <a class="navbar-brand" href="">Similarities</a>
+        <a class="navbar-brand" href="../search">WikiData</a>
     </nav>
 
     <main role="main">
 
-        <div class="jumbotron" style="background:#FFDC00 !important">
+ <div class="jumbotron bg-white text-black" style="!important">
             <div class="container">
-                <p class="display-3"><b> WikiNgram Viewer </b></p>
-                <p>
-                    WikiNgram Viewer 2 2is a new tool for automatizing your research in Culturomics. We have linked
-                    Russian Google Ngrams with Wikidata and retrieved the events which caused their frequency growth in
-                    certain years. Just enter your words of interest and click "search".
+                <p class="display-4"><b> WikiNgram Viewer </b></p>
+                <img src="{% static 'images/events.png' %}" class="img-fluid" alt="Events">
+                <p class="display-5">
+                    <b>WikiNgram Viewer</b> is a new tool for automatizing your research in Culturomics.
+                    This tool:
+                    <ul>
+                <li>provides the results of linking Russian ngrams from the Google Books with Wikidata;</li>
+                <li>builds <b>a scatter plot</b> of Wikidata events about query ngrams, with details on the hover.
+                <ul><li><i>X-coordinate</i> is a year when the ngram has grown in usage in the Google Books;
+            </li>
+                <li><i>Y-coordinate</i> is a <i>Z-score</i> of the ngram frequency growth in this year;</li>
+                   <li>If <i>Z-score</i> > 1.96, the ngram grew in usage this year more than on average;</li>
+                    <li>If -1.96 < <i>Z-score</i> < 1.96, the number of usages grew as usual;</li>
+                    <li>If <i>Z-score</i> is below 1.96, the usage grew less than usual; </li></ul>
+    <li>provides the table with the graph data. The table can de downloaded as CSV.</li>
+</ul>
+                WikiNgram Viewer works only with Russian and is complementary to the Google Books Ngram Viewer (link).
+ </p>
+                 <p class="display-5">
+                Just enter your words of interest and click "search".
                 </p>
             </div>
         </div>
+        <hr width='5000' color='black'/>
 
         <div class="jumbotron bg-white">
             <div class="container">
-                <h3 class="display-7"> Enter Russian words, separated by a comma:</h3>
+                <h4 class="display-7"> Enter a Russian word:</h4>
                 <br>
                 <div class="input-group">
                     <input type="text" class="form-control" name="ngram" id="ngram" placeholder="антипротон">
                     <span class="input-group-btn">
-                        <button type="button" name="btn" id="btn" class="btn btn-info">Search</button>
-                    </span>
+            <button type="button" name="btn" id="btn" class="btn text-white bg-dark">Search</button>
+          </span>
                 </div>
             </div>
         </div>
