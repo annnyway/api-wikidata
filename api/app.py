@@ -4,11 +4,13 @@ from jsonrpc.backend.flask import api
 from flask import Flask
 from jsonrpc.exceptions import JSONRPCDispatchException
 import json
-
+import os.path
 from hseling_api_wikidata.database_search import DatabaseSearch, NotFoundError
 from hseling_api_wikidata.connect_to_db import connect
 
 from get_data import get_data
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 punct = punctuation + '«»—…“”*–'
 morph = Mystem()
@@ -20,7 +22,7 @@ app.add_url_rule('/', 'search', api.as_view(), methods=['POST'])
 
 @api.dispatcher.add_method
 def search(ngrams: list):
-    cursor = connect("wikidata.db")
+    cursor = connect(os.path.join(BASE_DIR, "wikidata.db"))
     try:
         data = DatabaseSearch(ngrams=ngrams,
                               morph=morph,

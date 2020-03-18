@@ -44,7 +44,7 @@ def json_result(request):
     data = [i.strip() for i in data.split(",")]
 
     try:
-        response = req("http://127.0.0.1:8000/", "search", ngrams = data)
+        response = req("http://127.0.0.1:5000/", "search", ngrams = data)
         output = json.loads(response.data.result)
         csv_data = output["csv_result"]
         test_data = StringIO(csv_data)
