@@ -18,7 +18,7 @@ def json_result_plot(request):
     data = request.GET["q"]
 
     try:
-        response = req("http://127.0.0.1:5000/", "marina", ngram=data)
+        response = req("http://127.0.0.1:5000/", "clustersearch", ngram=data)
         output = json.loads(response.data.result)
         words = output['ngrams']
         result = []
