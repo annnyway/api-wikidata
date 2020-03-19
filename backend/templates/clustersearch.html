@@ -27,24 +27,24 @@
         jQuery(document).ready(function () {
 
             function userproc() {
-                console.log($("#SearchType1").is(":checked"));
-                var test = '0'
 
                 var ngram = $('#ngram').val();
-                if ($("#SearchType1").is(":checked")) {
-  test = "1"
+                if ($("#SearchType2").is(":checked")) {
+                    var freq = "change_rates";
+                    var sim = "top10_cosine_change_rate"
+  //
 }
 
-else if ($("#SearchType1").is(":checked")) {
-  test = "2"
+else {
+  var freq = "relative_frequencies_1918_2009";
+  var sim = "top10_cosine_rel_values"
 }
                 //var test = "test"//$('#SearchType1').val();
 
                 $.getJSON("/json_result_plot", {
                     "q": ngram,
-                    "freq": "relative_frequencies_1918_2009",
-                    "sim": "top10_cosine_rel_values",
-                    "test": test
+                    "freq": freq,
+                    "sim": sim
                 },
 
                     function (data) {
@@ -94,7 +94,12 @@ else if ($("#SearchType1").is(":checked")) {
 
             $('#ngram').val("");
 
-            $('#SearchType').val("");
+            $('#form-check-input').click(function() {
+  if($('#SearchType2').is(":checked")){
+    $('#SearchType1').find('span').removeClass('checked');
+    $('#SearchType1').prop('checked', false);
+  }
+});
 
         });
     </script>

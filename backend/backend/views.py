@@ -18,7 +18,7 @@ def datasets(request):
 
 def json_result_plot(request):
     res = request.GET
-    print(res["test"])
+
 
 
 
