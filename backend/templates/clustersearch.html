@@ -27,13 +27,24 @@
         jQuery(document).ready(function () {
 
             function userproc() {
+                console.log($("#SearchType1").is(":checked"));
+                var test = '0'
 
                 var ngram = $('#ngram').val();
+                if ($("#SearchType1").is(":checked")) {
+  test = "1"
+}
+
+else if ($("#SearchType1").is(":checked")) {
+  test = "2"
+}
+                //var test = "test"//$('#SearchType1').val();
 
                 $.getJSON("/json_result_plot", {
                     "q": ngram,
                     "freq": "relative_frequencies_1918_2009",
-                    "sim": "top10_cosine_rel_values"
+                    "sim": "top10_cosine_rel_values",
+                    "test": test
                 },
 
                     function (data) {
@@ -83,6 +94,8 @@
 
             $('#ngram').val("");
 
+            $('#SearchType').val("");
+
         });
     </script>
 
@@ -90,9 +103,9 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-info flex-row-reverse">
-        <a class="navbar-brand" href="../search#about">About</a>
-        <a class="navbar-brand" href="../search#dataset">Datasets</a>
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-info flex-row-reverse" style="background-color:#153C4E">
+        <a class="navbar-brand" href="#about">About</a>
+        <a class="navbar-brand" href="../datasets">Datasets</a>
         <a class="navbar-brand" href="">Similarities</a>
         <a class="navbar-brand" href="../search">WikiData</a>
     </nav>
@@ -137,13 +150,13 @@
           </span>
                 </div>
                             <div class="form-check">
-<input class="form-check-input" type="radio" name="SearchType" id="SearchType1" value="option1" checked="">
+<input class="form-check-input" type="radio" name="SearchType1" id="SearchType1" value="option1" checked="">
 <label class="form-check-label" for="SearchType1">
 Relative Frequencies
 </label>
 </div>
 <div class="form-check">
-<input class="form-check-input" type="radio" name="SearchType" id="SearchType2" value="option2">
+<input class="form-check-input" type="radio" name="SearchType2" id="SearchType2" value="option2">
 <label class="form-check-label" for="SearchType2">
 Change Rates
 </label>
@@ -179,6 +192,13 @@ Change Rates
         </div>
 
         <hr width='5000' color='#39CCCC' />
+          <div class="jumbotron text-white bg-dark" id="about">
+        <div class="container">
+            <h3> About the WikiNgrams project</h3>
+            <p> some text </p>
+            <br>
+        </div>
+    </div>
 
     </main>
 

@@ -13,8 +13,12 @@ def query(request):
 def clustersearch(request):
     return render(request, "clustersearch.html")
 
+def datasets(request):
+    return render(request, "datasets.html")
+
 def json_result_plot(request):
     res = request.GET
+    print(res["test"])
 
 
 

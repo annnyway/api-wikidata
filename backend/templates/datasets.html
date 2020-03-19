@@ -1,0 +1,91 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>WikiNgram Viewer</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/jumbotron/">
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top flex-row-reverse" style="background-color:#6878AB">
+        <a class="navbar-brand" href="#about">About</a>
+        <a class="navbar-brand" href="">Datasets</a>
+        <a class="navbar-brand" href="../clustersearch">Similarities</a>
+        <a class="navbar-brand" href="../search">WikiData</a>
+    </nav>
+
+    <main role="main">
+
+        <div class="jumbotron bg-white text-black" style="!important">
+            <div class="container">
+                <p class="display-4"><b> WikiNgram Viewer </b></p>
+                <img src="{% static 'images/events4.png' %}" class="img-fluid" alt="Events">
+
+        <div class="jumbotron" style="background:white !important" id="dataset">
+          <div class="container">
+        <table>
+          <tbody><tr>
+            <h3 class="display-5"><b>Corrected Dataset of Russian 1-grams from pre-revolutionary Google Books </b></h3>
+       </tr>
+      </tbody></table>
+                <p>
+                    Russian Google 1-grams up to 1918 year with an attemted correction of orthography supposedly mistaken by OCR. A fuller explanation is in the <a href="https://github.com/kak-to-tak/Google_rusngram_spellcheck/blob/master/Experiments_with_Automatic_Spelling_Correction_of_Russian_Google_ngrams.pdf">paper</a> and the <a href="https://github.com/kak-to-tak/Google_rusngram_spellcheck">repository</a>
+                </p>
+
+                <p><b> File Format: </b> Each of the files below is compressed <i>tab</i>-separated data. Each line has the following format:
+                </p>
+                <blockquote><pre>index raw_ngram TAB n_gram TAB year TAB match_count TAB volume_count TAB new_index TAB non_dictionary TAB corrected_ngram NEWLINE</pre>
+                </blockquote>
+                <p>As an example, here is the 1897th line from the <tt>a</tt> file of the Russian 1-grams (googlebooks-rus-corrected-1gram--a.gz):
+                </p>
+                <blockquote><pre>1  1верь 1верь 1897  1 1 1 True тверь
+</pre></blockquote>
+                <p>The rest information about the meanings of the columns' names you can read <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">here.</a>
+                </p>
+                <p><b>1-grams</b>
+                    <a href="https://drive.google.com/open?id=1keJPwSNTFwH3U8-HYtsHw-LsBLHSWcW9">1</a>
+                    <a href="https://drive.google.com/open?id=1zJzXNDGrjpCFH__cmblxXQCsJM9VgfKH">2</a>
+                    <a href="https://drive.google.com/open?id=1_2nZbLToP-0Ey4Atc-ZjAmY0GAdZlqhj">4</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="jumbotron text-white bg-dark" id="about">
+            <div class="container">
+                <h3> About the WikiNgrams project</h3>
+                <p> some text </p>
+                <br>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="container">
+        <p>&copy;2019</p>
+    </footer>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+
+</html>
