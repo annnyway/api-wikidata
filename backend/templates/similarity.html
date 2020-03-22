@@ -118,27 +118,11 @@ else {
 
  <div class="jumbotron bg-white text-black" style="!important">
             <div class="container">
-                <p class="display-4"><b> WikiNgram Viewer </b></p>
-                <img src="{% static 'images/events3.png' %}" class="img-fluid" alt="Events">
-                <p class="display-5">
-                    <b>WikiNgram Viewer</b> is a new tool for automatizing your research in Culturomics.
-                    This tool:
-                    <ul>
-                <li>provides the results of linking Russian ngrams from the Google Books with Wikidata;</li>
-                <li>builds <b>a scatter plot</b> of Wikidata events about query ngrams, with details on the hover.
-                <ul><li><i>X-coordinate</i> is a year when the ngram has grown in usage in the Google Books;
-            </li>
-                <li><i>Y-coordinate</i> is a <i>Z-score</i> of the ngram frequency growth in this year;</li>
-                   <li>If <i>Z-score</i> > 1.96, the ngram grew in usage this year more than on average;</li>
-                    <li>If -1.96 < <i>Z-score</i> < 1.96, the number of usages grew as usual;</li>
-                    <li>If <i>Z-score</i> is below 1.96, the usage grew less than usual; </li></ul>
-    <li>provides the table with the graph data. The table can de downloaded as CSV.</li>
-</ul>
-                WikiNgram Viewer works only with Russian and is complementary to the Google Books Ngram Viewer (link).
- </p>
-                 <p class="display-5">
-                Just enter your words of interest and click "search".
+                <p align="center">
                 </p>
+                <p style="font-size:50px" align="center">Similarities<br>
+                    <img src="{% static 'images/events3.png' %}" class="img-fluid" width="400" height="600" alt="Events">
+                <p align="center"> Какой-нибудь текст </p>
             </div>
         </div>
         <hr width='5000' color='#39CCCC'/>
@@ -198,11 +182,9 @@ Change Rates
             </div>
         </div>
 
-        <hr width='5000' color='#39CCCC' />
-          <div class="jumbotron text-white bg-dark" id="about">
+          <div class="jumbotron" id="about">
         <div class="container">
-            <h3> About the WikiNgrams project</h3>
-            <p> some text </p>
+            <h3> О ресурсе </h3>
             <br>
         </div>
     </div>
@@ -210,7 +192,14 @@ Change Rates
     </main>
 
     <footer class="container">
-        <p>&copy;2019</p>
+        <p> Ресурс разработан студентами магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 гг. Участники проекта:</p>
+    <ul>
+	    <li>Николаева Анна</li>
+	    <li>Пожидаева Марина</li>
+	    <li>Митрофанова Марина</li>
+	    <li>Жордания Тамара</li>
+	    <li>Гонг Энзе</li>
+    </ul>
     </footer>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
