@@ -261,16 +261,21 @@
     <main role="main">
 
         <div class="jumbotron bg-white text-black" style="padding-bottom:10px;" id="wikingram">
-            <div class="container">
-                <p class="display-4" align="center"><b> WikiNgram Viewer </b></p>
+            <p class="container">
+                <p class="display-4" align="center"><b> WikiNgram Viewer </b>
+            <br>
+                <img src="{% static 'images/events.png' %}" class="img-fluid" width="400" height="600" alt="Events">
+            </p>
+            <br>
                 <p align="center">
-                    WikiNgram Viewer - новый инструмент для автоматизации исследований в области культуромики. Он связывает <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">Google Ngrams</a> русского языка с <a href="https://www.wikidata.org/wiki/Wikidata:Introduction">Викиданными</a> и позволяет строить гипотезы о событиях, которые привели к росту употребления языковых единиц в определенные годы.
-                </p>
+                    <b>WikiNgram Viewer</b> - новый инструмент для автоматизации исследований в области культуромики. Он связывает <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">Google Ngrams</a> русского языка с <a href="https://www.wikidata.org/wiki/Wikidata:Introduction">Викиданными</a> и позволяет строить гипотезы о событиях, которые привели к росту употребления языковых единиц в определенные годы.
+                <br>
+                   </p>
                 <p align="right">
                 <a role="button" class="btn btn-outline-secondary" href="#about">Подробнее</a>
                     </p>
                 <br><br>
-                <p>Введите русские слова или словосочетания через запятую:</p>
+            <p><b>Введите русские слова или словосочетания через запятую:</b></p>
                 <div class="input-group">
                     <input type="text" class="form-control" name="ngram" id="ngram" placeholder="антипротон, антинейтрон">
                     <span class="input-group-btn active">
@@ -314,7 +319,7 @@
     </main>
 
     <footer class="container">
-        <p align="center">Ресурс WikiNgramViewer разработан Николаевой Анной в рамках магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 г. По всем вопросам обращаться на <a href="nikolaeva.ann.anyway@gmail.com">nikolaeva.ann.anyway@gmail.com</a>
+        <p align="center">Ресурс WikiNgramViewer разработан Николаевой Анной в рамках магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 гг. По всем вопросам обращаться на <a href="nikolaeva.ann.anyway@gmail.com">nikolaeva.ann.anyway@gmail.com</a>
 </p>
     </footer>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
