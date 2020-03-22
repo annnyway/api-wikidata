@@ -30,14 +30,14 @@
 
                 var ngram = $('#ngram').val();
                 if ($("#SearchType2").is(":checked")) {
-                    var freq = "change_rates";
-                    var sim = "top10_cosine_change_rate"
+                    var freq = "rel";
+                    var sim = "cosine"
   //
 }
 
 else {
-  var freq = "relative_frequencies_1918_2009";
-  var sim = "top10_cosine_rel_values"
+  var freq = "rel";
+  var sim = "dtw"
 }
                 //var test = "test"//$('#SearchType1').val();
 
@@ -153,18 +153,21 @@ else {
             <button type="button" name="btn" id="btn" class="btn text-white bg-dark">Search</button>
           </span>
                 </div>
-                            <div class="form-check">
-<input class="form-check-input" type="radio" name="SearchType1" id="SearchType1" value="option1" checked="">
+                            <div class="form-check form-check-inline">
+<input class="form-check-input" type="radio" name="SearchType" id="SearchType1" value="option1" checked="">
 <label class="form-check-label" for="SearchType1">
 Relative Frequencies
 </label>
 </div>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="SearchType2" id="SearchType2" value="option2">
+<div class="form-check form-check-inline">
+<input class="form-check-input-inline" type="radio" name="SearchType" id="SearchType2" value="option2">
 <label class="form-check-label" for="SearchType2">
 Change Rates
 </label>
 </div>
+
+
+
 </label>
 </div>
             </div>
