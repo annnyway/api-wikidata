@@ -1,0 +1,324 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>WikiNgram Viewer</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/jumbotron/">
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
+
+
+    <script>
+        function downloadCSV(csv, filename) {
+            var csvFile;
+            var downloadLink;
+
+            csvFile = new Blob([csv], {type: "text/csv"});
+            downloadLink = document.createElement("a");
+            downloadLink.download = filename;
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+        }
+
+        function exportTableToCSV(filename) {
+            var csv = [];
+            var rows = document.querySelectorAll("table tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+
+                for (var j = 0; j < cols.length; j++)
+                    row.push(cols[j].innerText);
+
+                csv.push(row.join(","));
+            }
+            downloadCSV(csv.join("\n"), filename);
+        }
+    </script>
+
+    <script>
+        jQuery(document).ready(function() {
+            function generateRandomNumber(min, max) {
+                            return Math.random() * (max - min) + min;
+                        };
+
+            function userproc() {
+                var ngram = $('#ngram').val();
+                $.getJSON("/json_result", {
+                    "q": ngram
+                }, function(data) {
+                    if (data.hasOwnProperty("error")) {
+                        $("#ajax").hide();
+                        $("#ajax_table").hide();
+                        $("#ajax_error").removeClass("d-none").show();
+                    } else {
+                        $("#ajax").show();
+                        $("#ajax_error").hide();
+
+                        var google_years = [],
+                            google_periods = [],
+                            growthSpeed = [],
+                            ngrams = [],
+                            wikiEntity = [],
+                            qNumber = [],
+                            propertyValue = [],
+                            object = [],
+                            organization = [],
+                            justDate = [],
+                            startTime = [],
+                            endTime = [],
+                            timePoint = [];
+
+                        // console.log(data["csv"])
+
+                        d3.csvParseRows(data["csv"], function(d) {
+                            google_years.push(Number(d[13]));
+                            google_periods.push(d[14]);
+                            growthSpeed.push(Number(d[12]));
+                            ngrams.push(d[1]);
+                            wikiEntity.push(d[2]);
+                            qNumber.push(d[3]);
+                            propertyValue.push(d[5]);
+                            object.push(d[6]);
+                            organization.push(d[7]);
+                            justDate.push(d[8]);
+                            startTime.push(d[9]);
+                            endTime.push(d[10]);
+                            timePoint.push(d[11]);
+                        });
+
+                        var text = [];
+                        for (let i = 0; i < ngrams.length; i++) {
+                            let hover_info = "<b>" + ngrams[i]+ "</b><br><br>" +
+                                "<b>Сущность в Викиданных</b>: " + wikiEntity[i] + "<br>" +
+                                "<b>#Q</b>: "+ qNumber[i] + "<br>" +
+                                "<b>Свойство</b>: " + propertyValue[i] + "<br>"
+                            if (object[i] !== "nan") {
+                                hover_info += "<b>Объект</b>: " + object[i] + "<br>"
+                            }
+                            if (organization[i] !== "nan") {
+                                hover_info += "<b>Организация</b>: " + organization[i] + "<br>"
+                            }
+                            if (justDate[i] !== "nan") {
+                                hover_info += "<b>Дата</b>: " + justDate[i] + "<br>"
+                            }
+                            if (startTime[i] !== "nan") {
+                                hover_info += "<b>Дата начала</b>: " + startTime[i] + "<br>"
+                            }
+                            if (endTime[i] !== "nan") {
+                                hover_info += "<b>Дата конца</b>: " + endTime[i] + "<br>"
+                            }
+                            if (timePoint[i] !== "nan") {
+                                hover_info += "<b>Дата</b>: " + timePoint[i] + "<br>"
+                            }
+                            if (google_periods[i] !== "nan") {
+                                hover_info += "<b>Частота нграммы растет в</b>: " + google_periods[i] + "<br>";
+                            } else {
+                                hover_info += "<b>Частота нграммы растет в</b>: " + google_years[i] + "<br>";
+                            }
+                            hover_info += "<b>Относительная скорость роста (Z-score)</b>: " + growthSpeed[i].toFixed(2) + "<br>";
+                            text.push(hover_info)
+                        }
+
+                        let growthSpeed_jittered = growthSpeed.map(
+                            function(element) {
+                                return element+generateRandomNumber(-0.03, 0.03)
+                            }
+                        );
+
+                        Plotly.newPlot("viz", {
+                                data: [
+                                {
+                                    type: "scatter",
+                                    mode: "markers",
+                                    x: google_years,
+                                    y: growthSpeed_jittered,
+                                    opacity: 0.7,
+                                    marker: {
+                                        size: 10,
+                                        line: {
+                                            color: 'black',
+                                            width: 1
+                                        }
+                                    },
+                                    transforms: [{ type: "groupby", groups: ngrams }],
+                                    hovertemplate: text,
+                                }],
+                                layout: {
+                                    title: "<b>Ваш результат:</b>",
+                                    hovermode: "closest",
+                                    hoverlabel: { bgcolor: "#FFF" },
+                                    legend: {orientation: 'h', y: -0.3},
+                                    xaxis: {
+                                        title: "Год",
+                                        zeroline: false
+                                    },
+                                    yaxis: {
+                                        title: "Z-score скорости роста частот",
+                                    },
+                                    height: 600,
+                                    shapes: [
+                                        {
+                                            type: 'line',
+                                            x0: 1920,
+                                            y0: 2,
+                                            x1: 2010,
+                                            y1: 2,
+                                            line: {
+                                                color: 'green',
+                                                width: 1,
+                                                dash: 'dot'
+                                            }
+                                        },
+                                    {
+                                            type: 'line',
+                                            x0: 1920,
+                                            y0: 3,
+                                            x1: 2010,
+                                            y1: 3,
+                                            line: {
+                                                color: 'red',
+                                                width: 1,
+                                                dash: 'dot'
+                                            }
+                                        },
+                                        {
+                                            type: 'line',
+                                            x0: 1920,
+                                            y0: -2,
+                                            x1: 2010,
+                                            y1: -2,
+                                            line: {
+                                                color: 'green',
+                                                width: 1,
+                                                dash: 'dot'
+                                            }
+                                        },
+                                        {
+                                            type: 'line',
+                                            x0: 1920,
+                                            y0: -3,
+                                            x1: 2010,
+                                            y1: -3,
+                                            line: {
+                                                color: 'red',
+                                                width: 1,
+                                                dash: 'dot'
+                                            }
+                                        },
+                                    ],
+                                },
+                                config: { responsive: true }
+                            });
+                        $("#ajax").show();
+                        $("#save_table_btn").removeClass("d-none").show();
+                        $("#ajax_table").removeClass("d-none").show();
+                        $(".tbl").html(data["table"]);
+                        $(".tbl2").html(data["wiki"]);
+                        }
+                });
+            };
+            $('#ngram').keypress(function(event) {
+                if (event.keyCode === 13) {
+                    userproc();
+                };
+            });
+            $('#btn').click(function() {
+                userproc();
+            });
+            $('#ngram').val("");
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top flex-row-reverse" style="background-color:#476f93">
+        <a class="navbar-brand" href="../datasets">Datasets</a>
+        <a class="navbar-brand" href="../similarity">Similarities</a>
+        <a class="navbar-brand" href="">WikiNgramViewer</a>
+    </nav>
+
+    <main role="main">
+
+        <div class="jumbotron bg-white text-black" style="padding-bottom:10px;" id="wikingram">
+            <div class="container">
+                <p class="display-4" align="center"><b> WikiNgram Viewer </b></p>
+                <p align="center">
+                    WikiNgram Viewer - новый инструмент для автоматизации исследований в области культуромики. Он связывает <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">Google Ngrams</a> русского языка с <a href="https://www.wikidata.org/wiki/Wikidata:Introduction">Викиданными</a> и позволяет строить гипотезы о событиях, которые привели к росту употребления языковых единиц в определенные годы.
+                </p>
+                <p align="right">
+                <a role="button" class="btn btn-outline-secondary" href="#about">Подробнее</a>
+                    </p>
+                <br><br>
+                <p>Введите русские слова или словосочетания через запятую:</p>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="ngram" id="ngram" placeholder="антипротон, антинейтрон">
+                    <span class="input-group-btn active">
+                        <button type="button" name="btn" id="btn" style="background-color:#476f93" class="btn text-white active">Найти</button>
+                    </span>
+                </div>
+                <p style="font-size:12px"><i>* На данный момент для поиска доступны только 1-граммы и 2-граммы.</i><p>
+                <div id="ajax_error" class="d-none">
+                    <br><br>
+                    <p align="center">К сожалению, нграммы не найдены! Попробуйте снова.</p>
+                    <br>
+                </div>
+            </div>
+        </div>
+
+        <div id="ajax">
+            <div class="row">
+                <div class="col-md-9" id="viz" style="padding-top:10px; padding-bottom:10px; border10px;">
+            <!-- <div class='container bg-white' style="padding-top:10px; padding-bottom:10px; border10px;"> -->
+                </div>
+                <div class='col-sm-3 tbl2'>
+                    </div>
+                <!--<div class="text-right" style="padding:30px;"> -->
+            </div>
+        </div>
+
+        <div id="ajax_table" class="d-none">
+                <div class='container tbl d-none'>
+                </div>
+            </div>
+        </div>
+
+        <div class="jumbotron" id="about">
+            <div class="container">
+                <h3> О проекте </h3>
+                <p> some text </p>
+                <br>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="container">
+        <p align="center">Ресурс WikiNgramViewer разработан Николаевой Анной в рамках магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 г. По всем вопросам обращаться на <a href="nikolaeva.ann.anyway@gmail.com">nikolaeva.ann.anyway@gmail.com</a>
+</p>
+    </footer>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+
+</html>

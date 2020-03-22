@@ -1,0 +1,216 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>WikiNgram Viewer</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/jumbotron/">
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
+
+    <script>
+        jQuery(document).ready(function () {
+
+            function userproc() {
+
+                var ngram = $('#ngram').val();
+                if ($("#SearchType2").is(":checked")) {
+                    var freq = "change_rates";
+                    var sim = "top10_cosine_change_rate"
+  //
+}
+
+else {
+  var freq = "relative_frequencies_1918_2009";
+  var sim = "top10_cosine_rel_values"
+}
+                //var test = "test"//$('#SearchType1').val();
+
+                $.getJSON("/json_result_plot", {
+                    "q": ngram,
+                    "freq": freq,
+                    "sim": sim
+                },
+
+                    function (data) {
+
+                        if (data.hasOwnProperty("error")) {
+
+                            $("#ajax").addClass("d-none");
+                            $("#ajax_error").removeClass("d-none");
+
+                        } else {
+
+                            $("#ajax").removeClass("d-none");
+                            $("#ajax_table").removeClass("d-none");
+                            $(".tbl").html(data["ngram"])
+                            //$("#ajax").addClass("d-none");
+                            //$("#ajax_error").addClass("d-none");
+                            //coords = data.coords[0]
+                            // var traces = [];
+
+                            // var traces = data
+
+                            var layout = {
+                                title: "Your result:",
+                                font: { size: 14 }
+                            };
+
+                            var config = { responsive: true }
+                            Plotly.newPlot('viz', data.coords, layout, config);
+                            // Plotly.newPlot('viz', traces, layout, config);
+                            $("#ajax").removeClass("d-none");
+                            $("#ajax_table").removeClass("d-none");
+                            $(".tbl").html(data["ngram"])
+                        }
+                    });
+
+            }
+
+            $('#ngram').keypress(function (event) {
+                if (event.keyCode === 13) {
+                    userproc();
+                };
+            });
+
+            $('#btn').click(function () {
+                userproc();
+            });
+
+            $('#ngram').val("");
+
+            $('#form-check-input').click(function() {
+  if($('#SearchType2').is(":checked")){
+    $('#SearchType1').find('span').removeClass('checked');
+    $('#SearchType1').prop('checked', false);
+  }
+});
+
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-info flex-row-reverse" style="background-color:#153C4E">
+        <a class="navbar-brand" href="../datasets">Datasets</a>
+        <a class="navbar-brand" href="">Similarities</a>
+        <a class="navbar-brand" href="../wikingram">WikiNgramViewer</a>
+    </nav>
+
+    <main role="main">
+
+ <div class="jumbotron bg-white text-black" style="!important">
+            <div class="container">
+                <p class="display-4"><b> WikiNgram Viewer </b></p>
+                <img src="{% static 'images/events3.png' %}" class="img-fluid" alt="Events">
+                <p class="display-5">
+                    <b>WikiNgram Viewer</b> is a new tool for automatizing your research in Culturomics.
+                    This tool:
+                    <ul>
+                <li>provides the results of linking Russian ngrams from the Google Books with Wikidata;</li>
+                <li>builds <b>a scatter plot</b> of Wikidata events about query ngrams, with details on the hover.
+                <ul><li><i>X-coordinate</i> is a year when the ngram has grown in usage in the Google Books;
+            </li>
+                <li><i>Y-coordinate</i> is a <i>Z-score</i> of the ngram frequency growth in this year;</li>
+                   <li>If <i>Z-score</i> > 1.96, the ngram grew in usage this year more than on average;</li>
+                    <li>If -1.96 < <i>Z-score</i> < 1.96, the number of usages grew as usual;</li>
+                    <li>If <i>Z-score</i> is below 1.96, the usage grew less than usual; </li></ul>
+    <li>provides the table with the graph data. The table can de downloaded as CSV.</li>
+</ul>
+                WikiNgram Viewer works only with Russian and is complementary to the Google Books Ngram Viewer (link).
+ </p>
+                 <p class="display-5">
+                Just enter your words of interest and click "search".
+                </p>
+            </div>
+        </div>
+        <hr width='5000' color='#39CCCC'/>
+
+        <div class="jumbotron bg-white">
+            <div class="container">
+                <h4 class="display-7"> Enter a Russian word:</h4>
+                <br>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="ngram" id="ngram" placeholder="дружинница">
+                    <span class="input-group-btn">
+            <button type="button" name="btn" id="btn" class="btn text-white bg-dark">Search</button>
+          </span>
+                </div>
+                            <div class="form-check">
+<input class="form-check-input" type="radio" name="SearchType1" id="SearchType1" value="option1" checked="">
+<label class="form-check-label" for="SearchType1">
+Relative Frequencies
+</label>
+</div>
+<div class="form-check">
+<input class="form-check-input" type="radio" name="SearchType2" id="SearchType2" value="option2">
+<label class="form-check-label" for="SearchType2">
+Change Rates
+</label>
+</div>
+</label>
+</div>
+            </div>
+        </div>
+
+
+        <div id="ajax_error" class="d-none">
+            <div class='jumbotron bg-white'>
+                <div class='container viz'>
+                    <h3 class='display-5'>Sorry, ngrams not found! Try again.</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="ajax" class="d-none">
+            <div class='jumbotron bg-white'>
+                <div class='container viz' id="viz">
+                </div>
+            </div>
+            <hr width='5000' color='#39CCCC' />
+        </div>
+
+
+        <div id="ajax_table" class="d-none">
+            <div class='jumbotron bg-white'>
+                <div class='container tbl'>
+                </div>
+            </div>
+        </div>
+
+        <hr width='5000' color='#39CCCC' />
+          <div class="jumbotron text-white bg-dark" id="about">
+        <div class="container">
+            <h3> About the WikiNgrams project</h3>
+            <p> some text </p>
+            <br>
+        </div>
+    </div>
+
+    </main>
+
+    <footer class="container">
+        <p>&copy;2019</p>
+    </footer>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+
+</html>

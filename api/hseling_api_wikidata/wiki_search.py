@@ -1,11 +1,8 @@
-from itertools import groupby
 import pandas as pd
 
 
 class DatabaseSearch:
-    
-    def __init__(self, ngrams:list, morph, punct, cursor):
-        
+    def __init__(self, ngrams, morph, punct, cursor):
         self.morph = morph
         self.cursor = cursor
         self.punct = punct
@@ -31,9 +28,7 @@ class DatabaseSearch:
         return lemmatized_ngrams
         
     def sql_query(self):
-        
         """Makes ngram queries to the ngram database"""
-        
         ngrams_with_letters = {ngram: ngram[0] for ngram in self.lemmatized_ngrams}
         result = []
 
@@ -43,14 +38,14 @@ class DatabaseSearch:
                                     AND ngram = '{ngram}'""")
             result += self.cursor.fetchall()
             
-        if result == []:
+        if not result:
             raise NotFoundError("Ngrams not found")
             
         return result
 
     def csv_format(self):
 
-        """ Converts the dictionaries with query result data into csv format (appropriate for downloading) """
+        """Converts the dictionaries with query result data into csv format (appropriate for downloading) """
 
         col_list = ["ngram", "start_letter", "Q_number",
                     "wiki_entity", "property_code", "property_value",
@@ -64,15 +59,39 @@ class DatabaseSearch:
         for i, d in enumerate(dict_format):
             d["entry_id"] = i
 
-        df = pd.DataFrame(dict_format, columns=["entry_id","ngram",
-                    "wiki_entity", "Q_number", "property_code","property_value",
-                     "object", "organization", "just_date",
-                    "start_time","end_time","time_point",
-                    "growth_speed","google_year_1","google_year_2"])
+        df = pd.DataFrame(dict_format, columns=["entry_id",
+                                                "ngram",
+                                                "wiki_entity",
+                                                "Q_number",
+                                                "property_code",
+                                                "property_value",
+                                                "object",
+                                                "organization",
+                                                "just_date",
+                                                "start_time",
+                                                "end_time",
+                                                "time_point",
+                                                "growth_speed",
+                                                "google_year_1",
+                                                "google_year_2"])
+        df = df.fillna("nan")
+        df["google_period"] = "nan"
+        for i in df.index:
+            if df["google_year_2"][i] == "nan":
+                continue
+            df.loc[i, "google_period"] = str(int(df["google_year_1"][i])) + "-" + str(int(df["google_year_2"][i]))
 
+            new_row = df.iloc[i, :].values.tolist()
+            new_row = new_row[:-3] + [new_row[-2], new_row[-2], new_row[-1]]
+            row_df = pd.DataFrame([new_row], columns=df.columns.tolist())
+            df = df.append(row_df, ignore_index=True)
+
+        df = df.drop("google_year_2", axis=1)
+        df = df.rename(columns={"google_year_1": "google_year"})
         csv_format = df.to_csv()
 
         return csv_format    
+
 
 class NotFoundError(Exception):
     pass

@@ -18,6 +18,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('search/', views.query, name="search"),
-	path("json_result", views.json_result, name="json_result")
+    path('wikingram/', views.query, name="WikiNgramViewer"),
+    path('similarity/', views.clustersearch, name="SimilaritySearch"),
+    path('datasets/', views.datasets, name="Datasets"),
+	path("json_result", views.json_result, name="json_result"),
+    path("json_result_plot", views.json_result_plot, name="json_result_plot")
 ]
