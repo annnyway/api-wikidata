@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  toma-back:
+    depends_on:
+      - toma-api
+    build:
+      context: /Users/t.zhordaniya/api-wikidata/backend/
+      
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+
+    command: ["python3", "manage.py", "runserver", "0.0.0.0:8001"]
+
+  toma-api:
+    build:
+      context: /Users/t.zhordaniya/api-wikidata/api/
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+
+    command: [ "python3", "app.py" ]

@@ -1,3 +1,4 @@
+import sys
 from pymystem3 import Mystem
 from string import punctuation
 from jsonrpc.backend.flask import api
@@ -5,9 +6,10 @@ from flask import Flask
 from jsonrpc.exceptions import JSONRPCDispatchException
 import json
 import os.path
-from hseling_api_wikidata.wiki_search import DatabaseSearch, NotFoundError
+from hseling_api_wikidata.database_search import DatabaseSearch, NotFoundError
 from hseling_api_wikidata.connect_to_db import connect
-from hseling_api_wikidata.get_similarity_data import get_data
+
+from get_data import get_data
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -16,13 +18,17 @@ morph = Mystem()
 
 app = Flask(__name__)
 app.register_blueprint(api.as_blueprint())
-
 app.add_url_rule('/', 'search', api.as_view(), methods=['POST'])
+
 
 @api.dispatcher.add_method
 def search(ngrams: list):
     cursor = connect(os.path.join(BASE_DIR, "wikidata.db"))
     try:
+        print('TEST', file=sys.stderr)
+        print(len(ngrams), file=sys.stderr)
+        print(ngrams, file=sys.stderr)
+        #print(f'TEST method search: ngrams={ngrams}')
         data = DatabaseSearch(ngrams=ngrams,
                               morph=morph,
                               punct=punct,
@@ -39,7 +45,7 @@ def clustersearch(data: dict):
     ngram = data["q"]
     sim = data["sim"]
     freq = data["freq"]
-
+    # print(f'TEST clustersearch: data={data}')
     try:
         data = get_data(ngram=ngram, sim=sim, freq=freq)
         return json.dumps(data)
@@ -47,7 +53,7 @@ def clustersearch(data: dict):
         raise JSONRPCDispatchException(code=404, message="Ngrams not found")
 
 if __name__ == "__main__":
-    # app.run(host='0.0.0.0', debug=True, port=80)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True, port=5000)
+    #app.run(debug=True)
 
 app.add_url_rule('/', 'datasets', api.as_view(), methods=['POST'])

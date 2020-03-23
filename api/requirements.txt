@@ -3,5 +3,6 @@ pymystem3
 jsonrpc
 flask
 jsonrpcclient
+pandas
 pprint
 json-rpc

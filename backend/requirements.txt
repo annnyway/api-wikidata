@@ -1,1 +1,6 @@
 Django==2.2.6
+pymystem3
+jsonrpc
+jsonrpcclient
+json-rpc
+pandas
