@@ -34,7 +34,6 @@ def get_data(ngram, freq="rel", sim="cosine"):
     res = {'ngrams':[], 'frequencies':[], 'similarities':[]}
     if n == 1:
         sims = [[i[0], n - i[1]] for i in sims]
-    print(sims)
     
     for arr in sorted(sims, key=lambda x:x[1], reverse=True):
         
