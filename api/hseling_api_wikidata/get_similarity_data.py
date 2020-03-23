@@ -26,6 +26,7 @@ def get_data(ngram, freq="rel", sim="cosine"):
     #print(freq)
      
     path_to_db = os.path.join(BASE_DIR, "ngrams.db")
+    print('\n\nres:', path_to_db, '\n\n')
     cursor = connect_to_db(path_to_db)
     # if pct_change:
     #     freq, sim = 'change_rates', 'top10_cosine_change_rate'
