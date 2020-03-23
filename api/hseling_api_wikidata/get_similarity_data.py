@@ -18,6 +18,10 @@ def get_from_db(cursor, ngram, col):
 
 
 def get_data(ngram, freq="rel", sim="cosine"):
+    n = 0
+    if sim == 'dtw':
+        n = 1
+    
     sim = "top_{}_{}".format(sim, freq)
     freq = "rows_" + freq
     
@@ -28,10 +32,16 @@ def get_data(ngram, freq="rel", sim="cosine"):
 
     # print('\n\n', sims, '\n\n')
     res = {'ngrams':[], 'frequencies':[], 'similarities':[]}
-    for arr in sims:
+    if n == 1:
+        sims = [[i[0], n - i[1]] for i in sims]
+    print(sims)
+    
+    for arr in sorted(sims, key=lambda x:x[1], reverse=True):
         
         word = arr[0]
         how_similar = arr[1]
+
+            
         word = cursor.execute("""SELECT {} from FREQUENCIES where idx='{}'""".format('ngram', word)).fetchall()[0][0]
         
         similarity = arr[1]
