@@ -19,6 +19,10 @@ def datasets(request):
     return render(request, "datasets.html")
 
 
+def wiki_instruction(request):
+    return render(request, "wiki-instruction.html")
+
+
 def json_result(request):
     data = request.GET["q"]
     data = [i.strip() for i in data.split(",")]
