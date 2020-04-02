@@ -4,6 +4,7 @@ from jsonrpc.backend.flask import api
 from flask import Flask
 from jsonrpc.exceptions import JSONRPCDispatchException
 import json
+import sys
 import os.path
 from hseling_api_wikidata.wiki_search import DatabaseSearch, NotFoundError
 from hseling_api_wikidata.connect_to_db import connect
@@ -36,15 +37,26 @@ app.add_url_rule('/', 'clustersearch', api.as_view(), methods=['POST'])
 
 @api.dispatcher.add_method
 def clustersearch(data: dict):
-    ngram = data["q"]
-    sim = data["sim"]
-    freq = data["freq"]
+    print(data)
+
+    
 
     try:
-        data = get_data(ngram=ngram, sim=sim, freq=freq)
+        years = (int(data['start']), int(data['end']) + 1)
+        ngram = data["q"]
+        sim = data["sim"]
+        freq = data["freq"]
+        n_words = int(data["n_words"])
+        data = get_data(ngram=ngram,
+            sim=sim, freq=freq,
+            years=years, n_words=n_words)
+        
         return json.dumps(data)
-    except NotFoundError:
-        raise JSONRPCDispatchException(code=404, message="Ngrams not found")
+    # except KeyError:
+    except:
+        print('\n\nError in api', sys.exc_info()[0])
+        # raise JSONRPCDispatchException(code=404, message="Ngrams not found")
+        return ''
 
 if __name__ == "__main__":
     # app.run(host='0.0.0.0', debug=True, port=80)
