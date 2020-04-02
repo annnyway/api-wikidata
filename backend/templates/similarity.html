@@ -3,74 +3,94 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v3.8.6">
-    <title>WikiNgram Viewer</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/jumbotron/">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+        <meta name="generator" content="Jekyll v3.8.6">
+        <title>WikiNgram Viewer</title>
 
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+        <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/jumbotron/">
 
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
 
-    <!-- Custom styles for this template -->
-    <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
+        <!--Plugin CSS file with desired skin-->
+        <link
+        rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
 
-    <script>
-        jQuery(document).ready(function () {
-            
-            function userproc() {
+        <!--jQuery-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-                var ngram = $('#ngram').val();
-                
-                if ($("#SearchType1").is(":checked")) {
-                    var freq = "rel";
-                    var sim = "cosine"
-  //
-}
+        <!--Plugin JavaScript file-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
 
-else {
-  var freq = "rel";
-  var sim = "dtw"
-}
-                //var test = "test"//$('#SearchType1').val();
 
-                $.getJSON("/json_result_plot", {
-                    "q": ngram,
-                    "freq": freq,
-                    "sim": sim
-                },
+        <script src="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css"></script>
 
-                    function (data) {
-                        debugger
+
+        <!-- Bootstrap core CSS -->
+        <link
+        href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
+
+        <script>
+            jQuery(document).ready(function () { // initSlideRange()
+                $(".js-range-slider").ionRangeSlider({
+                    type: "double",
+                    grid: true,
+                    min: 1880,
+                    max: 2009,
+                    from: 1985,
+                    to: 2009,
+                    prettify_separator: "",
+                    skin: 'square'
+                });
+
+                function userproc() {
+
+                    var [start, end] = $(".js-range-slider").val().split(';')
+
+
+                    var ngram = $('#ngram').val();
+                    var sim = $('input[name=sim]:checked').val()
+                    var freq = $('input[name=freq]:checked').val()
+                    var n_words = $('input[name=n_words]').val()
+                    // console.log(n_words)
+
+                    $.getJSON("/json_result_plot", {
+                        "q": ngram,
+                        "freq": freq,
+                        "sim": sim,
+                        "start": start,
+                        "end": end,
+                        "n_words": n_words
+                    }, function (data) {
+
                         if (data.hasOwnProperty("error")) {
 
                             $("#ajax").addClass("d-none");
                             $("#ajax_error").removeClass("d-none");
-                          
+
 
                         } else {
                             $("#ajax_error").addClass("d-none");
                             $("#ajax").removeClass("d-none");
-                            
+
                             $("#ajax_table").removeClass("d-none");
-                            
+
                             $(".tbl").html(data["ngram"])
 
-                            var layout = {
-                                title: "Your result:",
-                                font: { size: 14 }
-                            };
-
-                            var config = { responsive: true }
-                            Plotly.newPlot('viz', data.coords, layout, config);
+                            var config = {
+                                responsive: true
+                            }
+                            Plotly.newPlot('viz', data.coords, config);
                             // Plotly.newPlot('viz', traces, layout, config);
                             $("#ajax").removeClass("d-none");
                             $("#ajax_table").removeClass("d-none");
@@ -78,84 +98,128 @@ else {
                         }
                     });
 
-            }
+                }
 
-            $('#ngram').keypress(function (event) {
-                if (event.keyCode === 13) {
+                $('#ngram').keypress(function (event) {
+                    if (event.keyCode === 13) {
+                        userproc();
+                    };
+                });
+
+                $('#n_words').keypress(function (event) {
+                    if (event.keyCode === 13) {
+                        userproc();
+                    };
+                });
+
+                $('#btn').click(function () {
                     userproc();
-                };
+                });
+
+                $('#ngram').val("футболка");
+                $('#n_words').val("20");
+
             });
+        </script>
+    </head>
 
-            $('#btn').click(function () {
-                userproc();
-            });
+    <style>
+        /* REQUIRED */
 
-            $('#ngram').val("");
+        @import '~pretty-checkbox/src/pretty-checkbox.scss';
+        @import '~pretty-checkbox/scss/variables';
+        @import '~pretty-checkbox/scss/core';
 
-            $('#form-check-input').click(function() {
-  if($('#SearchType2').is(":checked")){
-    $('#SearchType1').find('span').removeClass('checked');
-    $('#SearchType1').prop('checked', false);
-  }
-});
+    </style>
 
-        });
-    </script>
+    <body>
 
-</head>
+        <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-info flex-row-reverse" style="background-color:#153C4E">
+            <a class="navbar-brand" href="../datasets">Datasets</a>
+            <a class="navbar-brand" href="">Similarities</a>
+            <a class="navbar-brand" href="../wikingram">WikiNgramViewer</a>
+        </nav>
 
-<body>
-
-    <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-info flex-row-reverse" style="background-color:#153C4E">
-        <a class="navbar-brand" href="../datasets">Datasets</a>
-        <a class="navbar-brand" href="">Similarities</a>
-        <a class="navbar-brand" href="../wikingram">WikiNgram Viewer</a>
-    </nav>
-
-    <main role="main">
-
- <div class="jumbotron bg-white text-black" style="!important">
-            <div class="container">
-                <p align="center">
-                </p>
-                <p style="font-size:50px" align="center">Similarities<br>
-                    <img src="{% static 'images/events3.png' %}" class="img-fluid" width="400" height="600" alt="Events">
-                        <p align="center"> Мы предположили, что частотности некоторых слов могут изменяться похожим образом. И что это может быть интересно. Введите слово и выберите вид близости - косинусная или dynamic time warping. Помимо самих слов, вы увидите, насколько они близки к вашему слову. (Здесь будет объяснения различий, а также можно будет выбрать относительные частоты либо динамику изменения в процентах) </p>
-            </div>
-        </div>
-        <hr width='1200' color='#39CCCC'/>
-
-        <div class="jumbotron bg-white">
-            <div class="container">
-                <h4 class="display-7"> Введите слово на русском языке:</h4>
-                <br>
-                <div class="input-group">
-                    <input type="text" class="form-control" name="ngram" id="ngram" placeholder="дружина">
-                    <span class="input-group-btn">
-            <button type="button" name="btn" id="btn" class="btn text-white bg-dark">Search</button>
-            
-          </span>
+        <main role="main">
+            <div class="jumbotron bg-white text-black" style="!important;padding:10;">
+                <div class="container">
+                    <p align="center"></p>
+                    <p style="font-size:4em" align="center">Similarities<br>
+                        <img src="{% static 'images/events3.png' %}" class="img-fluid" alt="Events">
+                    </p>
+                    <p align="center">
+                        Мы предположили, что частотности некоторых слов могут изменяться похожим образом. И что это может быть интересно. Введите слово и выберите вид близости - косинусная или dynamic time warping. Помимо самих слов, вы увидите, насколько
+                                                                                                                                                                                                                                                                                                они близки к вашему слову. (Здесь будет объяснения различий, а также можно будет выбрать относительные частоты либо динамику изменения в процентах)
+                    </p>
                 </div>
-                            <div class="form-check form-check-inline">
-<input class="form-check-input" type="radio" name="SearchType" id="SearchType1" value="option1" checked="">
-<label class="form-check-label" for="SearchType1">
-Cosine similarity
-</label>
-</div>
-<div class="form-check form-check-inline">
-<input class="form-check-input-inline" type="radio" name="SearchType" id="SearchType2" value="option2">
-<label class="form-check-label" for="SearchType2">
-    Dynamic time warping
-</label>
-</div>
-
-
-
-</label>
-</div>
             </div>
-        </div>
+            <hr width='auto' color='#39CCCC'/>
 
+            <div class="jumbotron bg-white">
+                <div class="container">
+                    <h4 class="display-7">
+                        Введите слово на русском языке:</h4>
+                    <br>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="ngram" id="ngram" placeholder="дружина">
+                        <span class="input-group-btn" style="padding-left: 10px;">
+                            <button type="button" name="btn" id="btn" class="btn text-white bg-dark">Search</button>
+                        </span>
+                    </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card" style="min-width: 250px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Мера близости</h5>
+                                    <div>
+                                        <input class="radio" type="radio" id="cosine" name="sim" value="cosine" checked>
+                                        <label for="cosine">Cosine distance</label>
+                                    </div>
+                                    <div>
+                                        <input class="radio" type="radio" id="dtw" name="sim" value="dtw">
+                                        <label for="dtw">Dynamic time warping</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card" style="min-width: 250px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Частотность</h5>
+                                    <div>
+                                        <input class="radio" type="radio" id="pct" name="freq" value="pct" checked>
+                                        <label for="pct">Динамика изменения (%)</label>
+                                    </div>
+                                    <div>
+                                        <input class="radio" type="radio" id="rel" name="freq" value="rel">
+                                        <label for="rel">Относительная</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card-body">
+                            <h5 class="card-title">Выберите период:</h5>
+                            <input type="text" id="years" class="js-range-slider" name="my_range" value="" style="margin:20"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 10px">
+                        <label>Показать первые</label>
+                        <input style="width: 5%;" class="form" id="n_words" name="n_words" placeholder="20">
+                        <label>слов</label>
+
+                    </div>
+
+                    <div class='row' id="viz" style="width: 100%"></div>
+                </div>
+
+            </div>
+
+        </div>
 
         <div id="ajax_error" class="d-none">
             <div class='jumbotron bg-white'>
@@ -167,43 +231,34 @@ Cosine similarity
 
         <div id="ajax" class="d-none">
             <div class='jumbotron bg-white'>
-                <div class='container viz' id="viz">
-                </div>
+                <div class='container viz' id="viz"></div>
             </div>
-            <hr width='5000' color='#39CCCC' />
+            <hr color='#39CCCC' />
         </div>
 
 
         <div id="ajax_table" class="d-none">
             <div class='jumbotron bg-white'>
-                <div class='container tbl'>
-                </div>
+                <div class='container tbl'></div>
             </div>
         </div>
 
-          <div class="jumbotron" id="about">
-        <div class="container">
-            <h3> О ресурсе </h3>
-            <br>
+        <div class="jumbotron" id="about">
+            <div class="container">
+                <h3>
+                    О ресурсе
+                </h3>
+                <br>
+            </div>
         </div>
-    </div>
-
-    </main>
-
-    <footer class="container">
-       <p> Ресурс разработан студентами магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 гг. </p>
-        <p>Научный руководитель: Орехов Борис Валерьевич</p>
-        <p>Участники проекта:</p>
-    <ul>
-	    <li>Николаева Анна</li>
-	    <li>Пожидаева Марина</li>
-	    <li>Митрофанова Марина</li>
-	    <li>Жордания Тамара</li>
-	    <li>Гонг Энзе</li>
-    </ul>
-    </footer>
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-
-</body>
-
-</html>
+    </body>
+</html></main><footer class="container">
+<p>
+    Ресурс разработан студентами магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 гг. Участники проекта:</p>
+<ul>
+    <li>Николаева Анна</li>
+    <li>Пожидаева Марина</li>
+    <li>Митрофанова Марина</li>
+    <li>Жордания Тамара</li>
+    <li>Гонг Энзе</li>
+</ul></footer><script src="{% static 'js/bootstrap.bundle.min.js' %}"></script></body></html>
