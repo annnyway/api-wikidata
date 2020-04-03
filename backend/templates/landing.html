@@ -1,0 +1,166 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+        <meta name="generator" content="Jekyll v3.8.6">
+        <title>Landing</title>
+
+        <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/jumbotron/">
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+
+        <!--Plugin CSS file with desired skin-->
+        <link
+        rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
+
+        <!--jQuery-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <!--Plugin JavaScript file-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css"></script>
+
+
+        <!-- Bootstrap core CSS -->
+        <link
+        href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
+
+    </head>
+
+    <style>
+        /* REQUIRED */
+
+        @import '~pretty-checkbox/src/pretty-checkbox.scss';
+        @import '~pretty-checkbox/scss/variables';
+        @import '~pretty-checkbox/scss/core';
+
+    </style>
+
+    <body>
+
+        <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-info flex-row-reverse" style="background-color:#153C4E">
+            <a class="navbar-brand" href="../datasets">Pre-reform Unigrams</a>
+            <a class="navbar-brand" href="../similarity">Similarity Viewer</a>
+            <a class="navbar-brand" href="../wikingram">WikiNgram Viewer</a>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="navbar-brand" href="#">Main <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+
+        </nav>
+
+        <main role="main">
+            <div class="jumbotron bg-white text-black" style="!important;padding:10;">
+                <p class="container">
+                <p class="display-4" align="center"><b> Title? or text </b>
+            <br>
+            </p>
+            <div class="container" align="center">
+                 <div class="row" >
+                        <div class="col-sm-4">
+                            <div class="card border-secondary">
+                                <div class="card-body">
+                                    <h5 align="center" class="card-title">WikiNgram Viewer</h5>
+                                    <div>
+                                        <a href="../wikingram">
+                                            <img src="{% static 'images/events.png' %}" class="img-fluid" width="100%" height="80%"/>
+                                        </a>
+                                         <!-- p align="center"><img src="{% static 'images/events.png' %}" class="img-fluid" width="100%" height="80%" alt="Events"></p> -->
+
+                                    </div>
+                                    <div>
+                                        <p>some text</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card border-info" >
+                                <div class="card-body">
+                                    <h5 align="center" class="card-title">Similarity Viewer</h5>
+                                    <div>
+                                        <a href="../similarity">
+                                            <img src="{% static 'images/events3.png' %}" class="img-fluid" width="100%" height="80%"/>
+                                        </a>
+
+                                    </div>
+                                    <div>
+                                        <p>some text?</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card border-danger" >
+                                <div class="card-body">
+                                    <h5 align="center" class="card-title">Pre-reform Unigrams</h5>
+                                    <div>
+                                        <a href="../datasets">
+                                            <img src="{% static 'images/events4.png' %}" class="img-fluid" width="100%" height="80%"/>
+                                        </a>
+
+                                    </div>
+                                    <div>
+                                        <p>some text?</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr width='auto' color='#39CCCC'/>
+
+        </div>
+
+
+
+        <div id="ajax" class="d-none">
+            <div class='jumbotron bg-white'>
+                <div class='container viz' id="viz"></div>
+            </div>
+            <hr color='#39CCCC' />
+        </div>
+
+
+        <div id="ajax_table" class="d-none">
+            <div class='jumbotron bg-white'>
+                <div class='container tbl'></div>
+            </div>
+        </div>
+
+        <div class="jumbotron" id="about">
+            <div class="container">
+                <h3>
+                    О ресурсе
+                </h3>
+                <br>
+            </div>
+        </div>
+    </body>
+</html></main><footer class="container">
+<p>
+    Ресурс разработан студентами магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 гг. Участники проекта:</p>
+<ul>
+    <li>Николаева Анна</li>
+    <li>Пожидаева Марина</li>
+    <li>Митрофанова Марина</li>
+    <li>Жордания Тамара</li>
+    <li>Гонг Энзе</li>
+</ul></footer><script src="{% static 'js/bootstrap.bundle.min.js' %}"></script></body></html>

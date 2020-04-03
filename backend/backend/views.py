@@ -7,6 +7,9 @@ import pandas as pd
 from io import StringIO
 
 
+def landing(request):
+    return render(request, "landing.html")
+
 def query(request):
     return render(request, "wikingram.html")
 
@@ -69,8 +72,8 @@ def json_result_plot(request):
     output = json.loads(response.data.result)
     print('Printing output in views', output)
     try:
-        
-        
+
+
         words = output['ngrams']
         print('words:', words)
         result = []

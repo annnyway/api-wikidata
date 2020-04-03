@@ -39,7 +39,7 @@ app.add_url_rule('/', 'clustersearch', api.as_view(), methods=['POST'])
 def clustersearch(data: dict):
     print(data)
 
-    
+
 
     try:
         years = (int(data['start']), int(data['end']) + 1)
@@ -50,7 +50,7 @@ def clustersearch(data: dict):
         data = get_data(ngram=ngram,
             sim=sim, freq=freq,
             years=years, n_words=n_words)
-        
+
         return json.dumps(data)
     # except KeyError:
     except:
@@ -63,3 +63,4 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 app.add_url_rule('/', 'datasets', api.as_view(), methods=['POST'])
+app.add_url_rule('/', 'landing', api.as_view(), methods=['POST'])
