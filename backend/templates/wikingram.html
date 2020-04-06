@@ -87,8 +87,6 @@
                             endTime = [],
                             timePoint = [];
 
-                        // console.log(data["csv"])
-
                         d3.csvParseRows(data["csv"], function(d) {
                             google_years.push(Number(d[13]));
                             google_periods.push(d[14]);
@@ -252,28 +250,29 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-sm navbar-dark fixed-top flex-row-reverse" style="background-color:#476f93">
-        <a class="navbar-brand" href="../datasets">Pre-reform Unigrams</a>
-        <a class="navbar-brand" href="../similarity">Similarity Viewer</a>
-        <a class="navbar-brand" href="">WikiNgram Viewer</a>
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="navbar-brand" href="../landing">Main <span class="sr-only">(current)</span></a>
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top flex-row-reverse" style="background-color:#476f93;padding: 0;height: 6%">
+            <a class="navbar-brand" style="background-color:#D4D8E8;margin-left:0;margin-right:0;margin-top: 0;margin-bottom: 0;height: 100%;width: 12%" align="center" href="../datasets"> Pre-reform Unigrams </a>
+            <a class="navbar-brand" style="background-color:#8b9dc3;margin-left:0;margin-right:0;height: 100%;width: 12%;padding-top: 5" align="center" href="../similarity"> Similarity Viewer </a>
+            <a class="navbar-brand" style="background-color:#476f93;margin-left:0;margin-right:0;height: 100%;width: 12% "align="center" href=""> WikiNgram Viewer </a>
+            <a class="navbar-brand bg-dark" style="background-color:black;margin-left:0;margin-right:60%;height: 100%;width: 4% "align="center" href="../landing"> Main </a>
+            <!-- <ul class="navbar-brand"  align="center" style="background-color:#5A5050;margin-left:0;margin-right:0;margin-top: 0;margin-bottom: 0;height: 100%;width: 4%;font-size:130%;width: 100%;color: white" align="center" href="../landing">Main </a>>
+               <li class="nav-item active" align="center" style="background-color:#5A5050;width: 100%;height:100%">
+                    <a class="navbar-nav mr-auto" style="background-color:#5A5050;margin-left:0;margin-right:0;margin-top: 0;margin-bottom: 0;padding: 0;height: 100%;font-size:130%;width: 100%;color: white" align="center" href="../landing">Main </a>
                 </li>
-            </ul>
-    </nav>
+            </ul> -->
+
+        </nav>
 
     <main role="main">
 
-        <div class="jumbotron bg-white" style="padding-right:132px; padding-left:132px" id="wikingram">
+        <div class="jumbotron bg-white" style="padding-right:10%; padding-left:10%" id="wikingram">
             <p class="container">
-                <p class="display-4" align="center"><b> WikiNgram Viewer </b>
+                <p class="display-4" align="center" style="font-size: 300%"><b> WikiNgram Viewer </b>
             <br>
                 <img src="{% static 'images/events.png' %}" class="img-fluid" width="30%" height="30%" alt="Events">
             </p>
                 <p align="center">
 <b>WikiNgram Viewer</b> - новый инструмент для автоматизации исследований в области культуромики.
-            <p><a href=”http://www.culturomics.org/“>Культуромика</a> зародилась в 2008-2011 годы после того, как Google “порезал” миллиарды текстов из Google Books на слова и словосочетания (n-граммы), собрал статистику их употреблений в книгах за последние 200 лет и визуализировал в <a href=”https://books.google.com/ngrams”>Google Books Ngram Viewer</a>. С тех пор у исследователей есть мощный инструмент для количественного анализа изменений в языке и проведения параллелей с реальными событиями и явлениями. В основе культуромики лежит идея о том, что частотность употребления слов в книгах отражает важные культурные тренды. <p>
             <p>Датасет n-грамм <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">Google Ngrams</a> состоит из n-грамм разных языков и их частотности за каждый год. Данных очень много, и одна только визуализация не позволяет понять всю картину - почему росло или падало употребление того или иного слова, какое событие на это повлияло. Чтобы исследователям было легче интерпретировать графики, мы связали Google Ngrams с <a href="https://www.wikidata.org/wiki/Wikidata:Introduction">Викиданными</a>.</p>
             <p><b>Викиданные</b> - это структурированная информация из Википедии, представленная в виде базы знаний. Там хранятся события, связанные с личностями и явлениями, но нет сведений о резонансе или влиянии этих событий. Однако можно измерить силу влияния событий с помощью Google Ngrams, посмотрев частотную статистику соответствующих слов. </p>
                 <p>Это и стало одной из задач нашего проекта: мы соединили слова и частоты русского языка из Google Ngrams с событиями в Викиданных. С помощью <b>WikiNgram Viewer</b> Вы можете узнать, какие именно события повлияли на рост употребления слов и в какие годы, а также сравнить силу резонанса разных событий для нескольких n-грамм. </p>
@@ -313,8 +312,8 @@
         <div id="ajax_table" class="d-none">
                 <div class='container tbl d-none'>
                 </div>
-            </div>
         </div>
+
 
         <div class="jumbotron" id="about">
             <div class="container">
