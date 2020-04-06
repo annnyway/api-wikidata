@@ -69,15 +69,15 @@
         <main role="main">
             <div class="jumbotron bg-white text-black" style="!important;padding:10;">
                 <p class="container">
-                <p class="display-4" align="center"><b> Title? or text </b>
-            <br>
+                <p class="display-4" align="center"><b> Проект "Культуромика" </b>
             </p>
+                <br><br>
             <div class="container" align="center">
                  <div class="row" >
                         <div class="col-sm-4">
-                            <div class="card" style="border-color:#347A82">
+                            <div class="card" style="border-color:black">
                                 <div class="card-body">
-                                    <h5 align="center" class="card-title">WikiNgram Viewer</h5>
+                                    <h4 align="center" class="card-title">WikiNgram Viewer</h4>
                                     <div>
                                         <a href="../wikingram">
                                             <img src="{% static 'images/events.png' %}" class="img-fluid" width="100%" height="80%"/>
@@ -86,15 +86,15 @@
 
                                     </div>
                                     <div>
-                                        <p>some text</p>
+                                        <p>Проследите связь между изменениями в языке и событиями в Викиданных</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            <div class="card" style="border-color:#3EACAB">
+                            <div class="card" style="border-color:black">
                                 <div class="card-body">
-                                    <h5 align="center" class="card-title">Similarity Viewer</h5>
+                                    <h4 align="center" class="card-title">Similarity Viewer</h4>
                                     <div>
                                         <a href="../similarity">
                                             <img src="{% static 'images/events3.png' %}" class="img-fluid" width="100%" height="80%"/>
@@ -108,9 +108,9 @@
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            <div class="card" style="border-color:#A2D4AB">
+                            <div class="card" style="border-color:black">
                                 <div class="card-body">
-                                    <h5 align="center" class="card-title">Pre-reform Unigrams</h5>
+                                    <h4 align="center" class="card-title">Pre-reform Unigrams</h4>
                                     <div>
                                         <a href="../datasets">
                                             <img src="{% static 'images/events4.png' %}" class="img-fluid" width="100%" height="80%"/>
@@ -126,8 +126,6 @@
                     </div>
                 </div>
             </div>
-            <hr width='auto' color='#39CCCC'/>
-
         </div>
 
 
@@ -149,20 +147,29 @@
         <div class="jumbotron" id="about">
             <div class="container">
                 <h3>
-                    О ресурсе
+                    О проекте
                 </h3>
                 <br>
-                <p><a href=”http://www.culturomics.org/“>Культуромика</a> зародилась в 2008-2011 годы после того, как Google “порезал” миллиарды текстов из Google Books на слова и словосочетания (n-граммы), собрал статистику их употреблений в книгах за последние 200 лет и визуализировал в <a href=”https://books.google.com/ngrams”>Google Books Ngram Viewer</a>. С тех пор у исследователей есть мощный инструмент для количественного анализа изменений в языке и проведения параллелей с реальными событиями и явлениями. В основе культуромики лежит идея о том, что частотность употребления слов в книгах отражает важные культурные тренды. <p>
+                <p><a href=”http://www.culturomics.org/“>Культуромика</a> зародилась в 2008-2011 годы после того, как Google “порезал” миллиарды текстов из Google Books на слова и словосочетания (n-граммы), собрал статистику их употреблений в книгах за последние 200 лет и визуализировал в <a href=”https://books.google.com/ngrams”>Google Books Ngram Viewer</a>. С тех пор у исследователей есть мощный инструмент для количественного анализа изменений в языке и их сопоставления с реальными событиями и явлениями. </p>
+                <p>В основе культуромики лежит идея о том, что частотность употребления слов в книгах отражает важные культурные тренды. Однако Ngram Viewer не всегда позволяет провести эти параллели.  </p>
+                <p>Мы предложили несколько вещей, позволяющих автоматизировать и улучшить качество культуромики:</p>
+                <ol>
+	                <li>Попробовали связать датасет Google Ngrams c Викиданными, чтобы автоматически определять события, повлиявшие на рост частотности той или иной n-граммы на русском языке.  </li>
+	                <li>Визуализировали на графике топ n-грамм, употребление которых изменялось похожим образом, чтобы исследователь получил больше контекста, анализируя те или иные русские слова.</li>
+	                <li>Автоматически исправили ошибки в распознавании дореволюционной орфографии русского языка в Google Ngrams и выложили результат в открытый доступ.</li>
+                </ol>
+
             </div>
         </div>
     </body>
 </html></main><footer class="container">
-<p>
-    Ресурс разработан студентами магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 гг. Участники проекта:</p>
-<ul>
-    <li>Николаева Анна</li>
-    <li>Пожидаева Марина</li>
-    <li>Митрофанова Марина</li>
-    <li>Жордания Тамара</li>
-    <li>Гонг Энзе</li>
-</ul></footer><script src="{% static 'js/bootstrap.bundle.min.js' %}"></script></body></html>
+<p> Ресурс разработан студентами магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 гг. </p>
+        <p>Научный руководитель: Орехов Борис Валерьевич</p>
+        <p>Участники проекта:</p>
+    <ul>
+	    <li>Николаева Анна</li>
+	    <li>Пожидаева Марина</li>
+	    <li>Митрофанова Марина</li>
+	    <li>Жордания Тамара</li>
+	    <li>Гонг Энзе</li>
+    </ul></footer><script src="{% static 'js/bootstrap.bundle.min.js' %}"></script></body></html>
