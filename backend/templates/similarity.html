@@ -80,16 +80,12 @@
                             $("#container_plot").hide();
 
                         } else {
-
                             $("#container_error").hide();
                             $("#container_plot").show();
-
                             var config = {
                                 responsive: true
                             }
                             Plotly.newPlot('container_plot', data.coords, config);
-
-
                         }
                     });
 
