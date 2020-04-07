@@ -52,14 +52,10 @@ def clustersearch(data: dict):
             years=years, n_words=n_words)
 
         return json.dumps(data)
-    # except KeyError:
     except:
-        # print('\n\nError in api', sys.exc_info()[0])
         raise JSONRPCDispatchException(code=404, message="Ngrams not found")
-        # return ''
 
 if __name__ == "__main__":
-    # app.run(host='0.0.0.0', debug=True, port=80)
     app.run(debug=True)
 
 app.add_url_rule('/', 'datasets', api.as_view(), methods=['POST'])
