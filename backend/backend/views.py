@@ -65,10 +65,12 @@ def json_result(request):
 
 def json_result_plot(request):
     res = request.GET
-    response = req("http://127.0.0.1:5000/", "clustersearch", data=res)
-    output = json.loads(response.data.result)
-    print('Printing output in views', output)
+    
+    
     try:
+        response = req("http://127.0.0.1:5000/", "clustersearch", data=res)
+        output = json.loads(response.data.result)
+        print('Printing output in views', output)
         
         
         words = output['ngrams']
@@ -86,7 +88,7 @@ def json_result_plot(request):
 
     # except ReceivedErrorResponseError:
     except:
-        print('Error in views', sys.exc_info()[0])
+        # print('Error in views', sys.exc_info()[0])
         result = JsonResponse({"error": "Sorry, ngrams not found! Try again.", "ngram":""})
 
     return result
