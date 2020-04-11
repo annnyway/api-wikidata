@@ -62,7 +62,6 @@
                     var sim = $('input[name=sim]:checked').val()
                     var freq = $('input[name=freq]:checked').val()
                     var n_words = $('input[name=n_words]').val()
-                    // console.log(n_words)
 
                     $.getJSON("/json_result_plot", {
                         "q": ngram,
@@ -73,28 +72,19 @@
                         "n_words": n_words
                     }, function (data) {
 
+
                         if (data.hasOwnProperty("error")) {
 
-                            $("#ajax").addClass("d-none");
-                            $("#ajax_error").removeClass("d-none");
-
+                            $("#container_error").show();
+                            $("#container_plot").hide();
 
                         } else {
-                            $("#ajax_error").addClass("d-none");
-                            $("#ajax").removeClass("d-none");
-
-                            $("#ajax_table").removeClass("d-none");
-
-                            $(".tbl").html(data["ngram"])
-
+                            $("#container_error").hide();
+                            $("#container_plot").show();
                             var config = {
                                 responsive: true
                             }
-                            Plotly.newPlot('viz', data.coords, config);
-                            // Plotly.newPlot('viz', traces, layout, config);
-                            $("#ajax").removeClass("d-none");
-                            $("#ajax_table").removeClass("d-none");
-                            $(".tbl").html(data["ngram"])
+                            Plotly.newPlot('container_plot', data.coords, config);
                         }
                     });
 
@@ -141,11 +131,6 @@
             <a class="navbar-brand" style="background-color:#D4D8E8;margin-left:0;margin-right:0;margin-top: 0;margin-bottom: 0;height: 100%;width: 12%" align="center" href="../datasets"> Pre-reform Unigrams </a>
             <a class="navbar-brand" align="center" style="background-color:#8b9dc3;margin-left:0;margin-right:0;height: 100%;width: 12%;padding-top: 5" href=""> Similarity Viewer </a>
             <a class="navbar-brand bg-dark" style="background-color:black;margin-left:0;margin-right:60%;height: 100%;width: 4% "align="center" href="../landing"> Main </a>
-           <!--  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="navbar-brand" href="../landing">Main <span class="sr-only">(current)</span></a>
-                </li>
-            </ul> -->
 
         </nav>
 
@@ -158,15 +143,15 @@
                     </p>
                     <p align="center">
                         Мы предположили, что частотности некоторых слов
-                         могут изменяться похожим образом.
-                         И что это может быть интересно.
-                         Введите слово и выберите вид близости -
-                         косинусная или dynamic time warping.
-                         Помимо самих слов, вы увидите, насколько
-                         они близки к вашему слову.
-                         (Здесь будет объяснения различий,
-                         а также можно будет выбрать относительные
-                         частоты либо динамику изменения в процентах)
+                        могут изменяться похожим образом.
+                        И что это может быть интересно.
+                        Введите слово и выберите вид близости -
+                        косинусная или dynamic time warping.
+                        Помимо самих слов, вы увидите, насколько
+                        они близки к вашему слову.
+                        (Здесь будет объяснения различий,
+                        а также можно будет выбрать относительные
+                        частоты либо динамику изменения в процентах)
                     </p>
                 </div>
             </div>
@@ -178,7 +163,7 @@
                         Введите слово на русском языке:</h4>
                     <br>
                     <div class="input-group">
-                        <input type="text" class="form-control" name="ngram" id="ngram" placeholder="дружина">
+                        <input type="text" class="form-control" name="ngram" id="ngram" placeholder="футболка">
                         <span class="input-group-btn" style="padding-left: 10px;">
                             <button type="button" name="btn" id="btn" class="btn text-white bg-dark">Search</button>
                         </span>
@@ -230,35 +215,18 @@
                         <label>слов</label>
 
                     </div>
-
-                    <div class='row' id="viz" style="width: 100%"></div>
+                    <div id="container_error" style="display:none">
+                        <br><br>
+                        <p style="text-align:center">К сожалению, нграммы не найдены! Попробуйте снова.</p>
+                        <br>
+                    </div>
+                    <div class='row' id="container_plot" style="width: 100%;display:none"></div>
                 </div>
 
             </div>
 
         </div>
 
-        <div id="ajax_error" class="d-none">
-            <div class='jumbotron bg-white'>
-                <div class='container viz'>
-                    <h3 class='display-5'>Ничего не найдено! :(</h3>
-                </div>
-            </div>
-        </div>
-
-        <div id="ajax" class="d-none">
-            <div class='jumbotron bg-white'>
-                <div class='container viz' id="viz"></div>
-            </div>
-            <hr color='#39CCCC' />
-        </div>
-
-
-        <div id="ajax_table" class="d-none">
-            <div class='jumbotron bg-white'>
-                <div class='container tbl'></div>
-            </div>
-        </div>
 
         <div class="jumbotron" id="about">
             <div class="container">
@@ -270,12 +238,13 @@
         </div>
     </body>
 </html></main><footer class="container">
-<p>
-    Ресурс разработан студентами магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 гг. Участники проекта:</p>
-<ul>
-    <li>Николаева Анна</li>
-    <li>Пожидаева Марина</li>
-    <li>Митрофанова Марина</li>
-    <li>Жордания Тамара</li>
-    <li>Гонг Энзе</li>
-</ul></footer><script src="{% static 'js/bootstrap.bundle.min.js' %}"></script></body></html>
+<p> Ресурс разработан студентами магистерской программы НИУ ВШЭ "Компьютерная лингвистика" в 2018-2020 гг. </p>
+    <p>Научный руководитель: <a href="https://www.hse.ru/staff/borekhov">Орехов Борис Валерьевич</a></p>
+        <p>Участники проекта:</p>
+    <ul>
+        <li>Николаева Анна (WikiNgram Viewer) email: <a href="malito:nikolaeva.ann.anyway@gmail.com">nikolaeva.ann.anyway@gmail.com</a>, Telegram: <a href="malito:@annnyway">@annnyway</a></li>
+	    <li>Пожидаева Марина (Similarity Viewer)</li>
+	    <li>Митрофанова Марина (Pre-reform Unigrams)</li>
+	    <li>Жордания Тамара (разработка сайта)</li>
+	    <li>Гонг Энзе (разработка сайта)</li>
+    </ul></footer><script src="{% static 'js/bootstrap.bundle.min.js' %}"></script></body></html>
