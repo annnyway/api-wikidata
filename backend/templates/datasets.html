@@ -155,13 +155,24 @@
                 <br>
                 <p><b> Формат файлов: </b> Каждый файл представляет собой данные разделенные табуляцией. Каждая срока аналогично нграмам <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">Google Books</a> имеет следующий вид:
                 </p>
-                <blockquote><pre>index raw_ngram TAB n_gram TAB year TAB match_count TAB volume_count TAB new_index TAB non_dictionary TAB corrected_ngram NEWLINE</pre>
+                <blockquote><pre>index raw_ngram TAB n_gram TAB year TAB match_count TAB volume_count TAB new_index TAB is_bastard TAB corrected_ngram NEWLINE</pre>
                 </blockquote>
+                <p>
+                    <pre>index - начальная буква униграммы</pre>
+                    <pre>raw_ngram - униграмма в том виде, в котором она встречается в <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">Google Books</a> </pre>
+                    <pre>ngram - очещенная от тегов, если есть</pre>
+                    <pre>year - год употребления</pre>
+                    <pre>match_count - количество употреблений</pre>
+                    <pre>volume_count - количество книг, в которых встретилось употребление </pre>
+                    <pre>new_index - новая начальная буква, если изменилась </pre>
+                    <pre>is_bastard - предположительно подлежашее исправлению (униграммы, написанные латиницей или длиной меньше 5 символов не брались во внимание) </pre>
+                    <pre>corrected_ngram - исправленная алгоритмом униграмма</pre>
+                </p>
                 <p>В качестве примера ниже привеодится 1897-я строка файла <tt>1.tsv</tt>:
                 </p>
                 <blockquote><pre>1  1верь 1верь 1897  1 1 т True тверь
 </pre></blockquote>
-                <p>Информацию о значениях названий колонок можно узнать на странице <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">Google Books</a>.
+                <p>Подробнее о <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">Google Books</a>.
                 </p>
                 <p>
                     <b> Транслиттерация индексов: </b>
