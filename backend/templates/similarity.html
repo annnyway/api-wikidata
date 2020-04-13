@@ -40,6 +40,7 @@
         <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
         <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
 
+
         <script>
             jQuery(document).ready(function () { // initSlideRange()
                 $(".js-range-slider").ionRangeSlider({
@@ -47,8 +48,8 @@
                     grid: true,
                     min: 1880,
                     max: 2009,
-                    from: 1985,
-                    to: 2009,
+                    from: 1983,
+                    to: 2006,
                     prettify_separator: "",
                     skin: 'square'
                 });
@@ -133,7 +134,6 @@
             <a class="navbar-brand bg-dark" style="background-color:black;font-size: 120%;margin-left:0;margin-right:60%;height: 100%;width: 4% "align="center" href="../landing"> Main </a>
 
         </nav>
-
         <main role="main">
             <div class="jumbotron bg-white text-black" style="!important;padding-right:10%; padding-left:10%">
                 <div class="container">
@@ -141,20 +141,34 @@
                     <p style="font-size: 320%" align="center">Similarity Viewer<br>
                         <img src="{% static 'images/events3.png' %}" class="img-fluid" width="40%" height="40%"  alt="Events">
                     </p>
+
                     <p align="center">
-                        Мы предположили, что частотности некоторых слов
-                        могут изменяться похожим образом.
-                        И что это может быть интересно.
-                        Введите слово и выберите вид близости -
-                        косинусная или dynamic time warping.
-                        Помимо самих слов, вы увидите, насколько
-                        они близки к вашему слову.
-                        (Здесь будет объяснения различий,
-                        а также можно будет выбрать относительные
-                        частоты либо динамику изменения в процентах)
+                        Мы скачали частотности слов на русском языке из <a data-toggle="tooltip" title="По этой ссылке вы можете скачать данные. Сделайте поиск на странице по слову 'Russian'" href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">
+                            Google ngram viewer</a> за 1880-2009 годы и сделали инструмент для нахождения слов, которые изменялись похожим образом. 
+                            <br>
+                            <br>
+                            Это очень просто и интересно!
+                            
+                            
+                            <br>
+                            <br>
+                            
+                            1. Выберите слово (например, “джинсы”).
+                            <br>
+                            2. Потом - меру близости: <a title="title" href="https://en.wikipedia.org/wiki/Cosine_similarity">косинусное расстояние</a> или <a href="https://en.wikipedia.org/wiki/Dynamic_time_warping">dynamic time warping</a>.
+                            <br>
+                            
+                            3. Вы можете выбрать между относительными частотами и динамикой изменений.
+                            <br>
+                            4. Выберите исторический период.
+                            <br>
+                            5. Наслаждайтесь экспериментами!
+                            
                     </p>
                 </div>
             </div>
+
+
             <hr width='auto' color='#39CCCC'/>
 
             <div class="jumbotron bg-white">
@@ -243,7 +257,7 @@
         <p>Участники проекта:</p>
     <ul>
         <li>Николаева Анна (WikiNgram Viewer) email: <a href="malito:nikolaeva.ann.anyway@gmail.com">nikolaeva.ann.anyway@gmail.com</a>, Telegram: <a href="malito:@annnyway">@annnyway</a></li>
-	    <li>Пожидаева Марина (Similarity Viewer)</li>
+	    <li>Пожидаева Марина (Similarity Viewer) <a href="https://t.me/mpozhidaeva">[Telegram]</a> [email: m.a.pozhidaeva@gmail.com]</li>
 	    <li>Митрофанова Марина (Pre-reform Unigrams)</li>
 	    <li>Жордания Тамара (разработка сайта)</li>
 	    <li>Гонг Энзе (разработка сайта)</li>
